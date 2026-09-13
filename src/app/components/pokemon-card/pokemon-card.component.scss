@@ -1,0 +1,191 @@
+@use 'sass:color';
+@use '../../../styles/pokemon-types' as pt;
+
+.card-container {
+  position: relative;
+  border-radius: 20px;
+  padding: 1.5rem;
+  margin-top: 50px; /* Espaço para a imagem "vazar" */
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease, border-color 0.3s ease;
+  outline: none;
+
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.15);
+  overflow: visible; /* Garante que o topo do Pokémon vaze livremente para fora do card sem ser cortado */
+
+  &:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 4px;
+  }
+
+  &:hover {
+    transform: translateY(-8px);
+    
+    .image-wrapper img {
+      transform: scale(1.15) translateY(-8px);
+    }
+
+    .card-watermark-clip .card-pokeball-watermark {
+      transform: rotate(25deg) scale(1.08);
+      opacity: 0.22;
+    }
+  }
+
+  // Camada que clipa a marca d'água aos 20px de borda arredondada sem cortar a cabeça do Pokémon
+  .card-watermark-clip {
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+
+    .card-pokeball-watermark {
+      position: absolute;
+      right: -20px;
+      bottom: -20px;
+      width: 130px;
+      height: 130px;
+      opacity: 0.08;
+      color: #000000;
+      pointer-events: none;
+      transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.3s ease;
+    }
+  }
+
+  // Botão de Favoritar no topo do card
+  .favorite-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #6b7280;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+    transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 5;
+
+    &:hover {
+      transform: scale(1.15);
+      background: white;
+      color: #e3350d;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+    }
+
+    &.active {
+      color: #e3350d;
+      background: white;
+      box-shadow: 0 2px 8px rgba(227, 53, 13, 0.25);
+    }
+
+    &:focus-visible {
+      outline: 2px solid #e3350d;
+    }
+  }
+
+  // ── Coloração Suave e Clara em Degradê por Tipo (Estilo Pastel da Referência) ──
+  @each $name, $color in pt.$type-colors {
+    &.type-#{$name} {
+      background: linear-gradient(
+        140deg,
+        color.mix(#ffffff, $color, 65%) 0%,
+        color.mix(#ffffff, $color, 38%) 50%,
+        color.mix(#ffffff, $color, 18%) 100%
+      );
+      border: 1px solid rgba($color, 0.4);
+      box-shadow: 0 8px 24px -4px rgba($color, 0.3);
+
+      &:hover {
+        border-color: rgba($color, 0.7);
+        box-shadow: 0 16px 32px -4px rgba($color, 0.45);
+      }
+    }
+  }
+
+  .image-wrapper {
+    position: absolute;
+    top: -50px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    pointer-events: none; // O clique deve ir para o card
+    z-index: 2;
+
+    img {
+      width: 110px;
+      height: 110px;
+      object-fit: contain;
+      filter: drop-shadow(0 10px 15px rgba(0,0,0,0.22));
+      transition: transform 0.4s ease;
+    }
+  }
+
+  .card-content {
+    margin-top: 60px; /* Empurra o texto para baixo da imagem absoluta */
+    text-align: center;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+
+    .pokemon-id {
+      display: block;
+      font-size: 0.85rem;
+      color: rgba(0, 0, 0, 0.52);
+      margin-bottom: 0.3rem;
+      font-weight: 700;
+    }
+
+    .pokemon-name {
+      font-size: 1.35rem;
+      color: #1a202c;
+      margin: 0 0 1rem 0;
+      text-transform: capitalize;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+    }
+
+    .types-row {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+
+      .type-badge {
+        padding: 0.32rem 0.85rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+        color: white;
+        border: none;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.16);
+        cursor: pointer;
+        transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.2s ease, box-shadow 0.2s ease;
+        outline: none;
+
+        &:hover {
+          transform: scale(1.08);
+          filter: brightness(1.1);
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+        }
+
+        &:focus-visible {
+          outline: 2px solid #1a202c;
+          outline-offset: 2px;
+        }
+      }
+    }
+  }
+}

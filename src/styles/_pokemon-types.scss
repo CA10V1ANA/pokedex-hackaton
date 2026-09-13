@@ -1,0 +1,55 @@
+/// _pokemon-types.scss
+/// Partial compartilhado com cores oficiais dos tipos de Pokémon.
+/// Importe em qualquer componente que precise de cores por tipo:
+///   @use '../../styles/pokemon-types' as pt;
+///   background: pt.type-color('fire');
+
+$type-colors: (
+  normal: #A8A77A,
+  fire: #EE8130,
+  water: #6390F0,
+  electric: #F7D02C,
+  grass: #7AC74C,
+  ice: #96D9D6,
+  fighting: #C22E28,
+  poison: #A33EA1,
+  ground: #E2BF65,
+  flying: #A98FF3,
+  psychic: #F95587,
+  bug: #A6B91A,
+  rock: #B6A136,
+  ghost: #735797,
+  dragon: #6F35FC,
+  dark: #705746,
+  steel: #B7B7CE,
+  fairy: #D685AD
+);
+
+/// Retorna a cor de um tipo pelo nome (string).
+/// Uso: color: type-color('fire');
+@function type-color($name) {
+  @return map-get($type-colors, $name);
+}
+
+/// Mixin que gera as classes .type-{nome} com gradiente e sombra hover.
+/// Parâmetro $child-selector: seletor filho que recebe a cor de fundo (ex: badge).
+@mixin type-classes($child-selector: '.type-badge', $fill-selector: '.stat-bar-fill') {
+  @each $name, $color in $type-colors {
+    &.type-#{$name} {
+      background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.95) 0%,
+        rgba($color, 0.22) 100%
+      );
+      border: 1px solid rgba($color, 0.35);
+
+      &:hover {
+        box-shadow: 0 12px 28px rgba($color, 0.35);
+      }
+
+      #{$fill-selector} {
+        background-color: $color;
+      }
+    }
+  }
+}

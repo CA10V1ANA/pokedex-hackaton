@@ -1,0 +1,122 @@
+@if (pokemon === null) {
+  <!-- Estado vazio ilustrado e acolhedor -->
+  <div class="empty-state">
+    <div class="empty-illustration" aria-hidden="true">
+      <svg class="floating-pokeball" width="76" height="76" viewBox="0 0 100 100" fill="none">
+        <circle cx="50" cy="50" r="46" stroke="#ccc" stroke-width="5" fill="#fcfcfc" />
+        <path d="M4.5 50 A45.5 45.5 0 0 1 95.5 50 Z" fill="#e3350d" opacity="0.85" />
+        <path d="M4.5 50h34m23 0h34" stroke="#444" stroke-width="5" />
+        <circle cx="50" cy="50" r="14" stroke="#444" stroke-width="5" fill="white" />
+        <circle cx="50" cy="50" r="5" fill="#444" />
+      </svg>
+    </div>
+    <h3>Nenhum Pokémon selecionado</h3>
+    <p>Selecione um Pokémon no catálogo para ver suas medidas, habilidades e status base aqui.</p>
+  </div>
+} @else {
+  <!-- Estado preenchido — exibe os dados do pokémon -->
+  <div class="detail-panel" [ngClass]="'type-' + pokemon.types[0]">
+
+    <!-- Marca d'água de Pokébola no fundo do painel -->
+    <svg class="panel-pokeball-watermark" viewBox="0 0 100 100" fill="none" aria-hidden="true">
+      <circle cx="50" cy="50" r="46" stroke="currentColor" stroke-width="8" />
+      <path d="M4 50h34m24 0h34" stroke="currentColor" stroke-width="8" />
+      <circle cx="50" cy="50" r="14" stroke="currentColor" stroke-width="8" fill="white" />
+      <circle cx="50" cy="50" r="6" fill="currentColor" />
+    </svg>
+
+    <div class="header">
+      <div class="nav-controls">
+        <button 
+          type="button" 
+          class="nav-btn prev-btn" 
+          [disabled]="!hasPrev" 
+          (click)="prev.emit()" 
+          title="Pokémon anterior"
+          aria-label="Pokémon anterior">
+          ‹
+        </button>
+        <span class="pokemon-id">{{ pokemon.paddedId }}</span>
+        <button 
+          type="button" 
+          class="nav-btn next-btn" 
+          [disabled]="!hasNext" 
+          (click)="next.emit()" 
+          title="Próximo Pokémon"
+          aria-label="Próximo Pokémon">
+          ›
+        </button>
+      </div>
+
+      <div class="header-actions">
+        <button 
+          type="button" 
+          class="favorite-panel-btn" 
+          [class.active]="isFavorite" 
+          (click)="toggleFavorite.emit(pokemon.id)"
+          [title]="isFavorite ? 'Remover dos favoritos' : 'Adicionar aos favoritos'"
+          [attr.aria-label]="isFavorite ? 'Remover dos favoritos' : 'Adicionar aos favoritos'"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" [attr.fill]="isFavorite ? '#e3350d' : 'none'" [attr.stroke]="isFavorite ? '#e3350d' : 'currentColor'" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          </svg>
+        </button>
+
+        <div class="types-row">
+          @for (type of pokemon.types; track type) {
+            <span class="type-badge badge-type-{{ type }}">{{ type }}</span>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="image-area">
+      <img [src]="pokemon.imageUrl" [alt]="'Imagem de ' + pokemon.name" />
+    </div>
+
+    <h2 class="pokemon-name">{{ pokemon.name }}</h2>
+
+    <div class="measurements">
+      <div class="measure">
+        <span class="label">Altura</span>
+        <span class="value">{{ pokemon.heightM }} m</span>
+      </div>
+      <div class="measure">
+        <span class="label">Peso</span>
+        <span class="value">{{ pokemon.weightKg }} kg</span>
+      </div>
+    </div>
+
+    <div class="abilities">
+      <h3>Habilidades</h3>
+      <div class="abilities-list">
+        @for (ability of pokemon.abilities; track ability) {
+          <span class="ability-badge">{{ ability }}</span>
+        }
+      </div>
+    </div>
+
+    <div class="stats">
+      <h3>Stats Base</h3>
+      @for (stat of pokemon.stats; track stat.name) {
+        <div class="stat-row">
+          <span class="stat-name">{{ stat.name }}</span>
+          <span class="stat-value">{{ stat.value }}</span>
+          <div class="stat-bar-bg">
+            <div 
+              class="stat-bar-fill" 
+              [style.width.%]="(stat.value / 255) * 100"
+              [style.background-color]="getStatColor(stat.value)"
+            ></div>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Link semântico para a página completa com deep link -->
+    <a [routerLink]="['/pokemon', pokemon.id]" class="full-detail-link">
+      Ver página completa →
+    </a>
+
+  </div>
+}

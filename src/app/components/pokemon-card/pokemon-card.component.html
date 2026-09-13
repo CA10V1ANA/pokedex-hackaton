@@ -1,0 +1,60 @@
+<div 
+  class="card-container" 
+  [ngClass]="'type-' + primaryType"
+  (click)="onClick()"
+  (keydown.enter)="onClick()"
+  (keydown.space)="onClick()"
+  tabindex="0"
+  role="button"
+  [attr.aria-label]="'Ver detalhes de ' + pokemon.name"
+>
+  <!-- Camada com borda arredondada para conter a marca d'água sem cortar o Pokémon -->
+  <div class="card-watermark-clip" aria-hidden="true">
+    <svg class="card-pokeball-watermark" viewBox="0 0 100 100" fill="none">
+      <circle cx="50" cy="50" r="46" stroke="currentColor" stroke-width="8" />
+      <path d="M4 50h34m24 0h34" stroke="currentColor" stroke-width="8" />
+      <circle cx="50" cy="50" r="14" stroke="currentColor" stroke-width="8" fill="white" />
+      <circle cx="50" cy="50" r="6" fill="currentColor" />
+    </svg>
+  </div>
+
+  <!-- Botão de Favoritar -->
+  <button 
+    type="button" 
+    class="favorite-btn" 
+    [class.active]="isFavorite" 
+    (click)="$event.stopPropagation(); toggleFavorite.emit(pokemon.id)"
+    [attr.aria-label]="isFavorite ? 'Remover dos favoritos' : 'Adicionar aos favoritos'"
+    [title]="isFavorite ? 'Remover dos favoritos' : 'Favoritar'"
+  >
+    <svg width="18" height="18" viewBox="0 0 24 24" [attr.fill]="isFavorite ? '#e3350d' : 'none'" [attr.stroke]="isFavorite ? '#e3350d' : 'currentColor'" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+    </svg>
+  </button>
+
+  <div class="image-wrapper" aria-hidden="true">
+    <img 
+      [src]="pokemon.imageUrl" 
+      [alt]="pokemon.name"
+      loading="lazy"
+    />
+  </div>
+
+  <div class="card-content">
+    <span class="pokemon-id" aria-hidden="true">{{ pokemon.paddedId }}</span>
+    <h3 class="pokemon-name">{{ pokemon.name }}</h3>
+    
+    <div class="types-row" aria-label="Tipos: {{ pokemon.types.join(', ') }}">
+      @for (type of pokemon.types; track type) {
+        <button 
+          type="button" 
+          class="type-badge badge-type-{{ type }}" 
+          (click)="$event.stopPropagation(); filterType.emit(type)"
+          [title]="'Filtrar por ' + type"
+        >
+          {{ type }}
+        </button>
+      }
+    </div>
+  </div>
+</div>
