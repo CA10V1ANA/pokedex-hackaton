@@ -1,0 +1,85 @@
+@use './styles/pokemon-types' as pt;
+
+/* ─── Google Fonts ─────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* ─── Design Tokens (CSS Variables) ───────────────────── */
+:root {
+  --font-base: 'Inter', system-ui, sans-serif;
+
+  /* LIGHT MODE (Padrão) */
+  --color-brand: #e3350d;
+  --color-brand-dark: #b22a0a;
+  --color-bg: #f0f2f5;
+  --color-surface: rgba(255, 255, 255, 0.85);
+  --color-text: #1a1a2e;
+  --color-text-muted: #666;
+  --color-border: rgba(255, 255, 255, 0.5);
+
+  --radius-card: 20px;
+  --radius-btn: 10px;
+  --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.08);
+  --shadow-hover: 0 12px 32px rgba(0, 0, 0, 0.15);
+
+  --transition-fast: 0.2s ease;
+  --transition-bounce: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* ─── Reset Mínimo ────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-base);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── Foco Visível (Acessibilidade Global) ─────────────── */
+:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ─── Scrollbar Customizada (Webkit) ─────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
+}
+
+/* ─── Animações ──────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ─── Classes Globais Específicas para Badges dos Tipos de Pokémon ─── */
+@each $name, $color in pt.$type-colors {
+  .badge-type-#{$name} {
+    background-color: $color !important;
+    color: #ffffff !important;
+  }
+}
+
+.badge-type-electric {
+  background-color: #F7D02C !important;
+  color: #222222 !important;
+}
