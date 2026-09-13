@@ -188,4 +188,66 @@
       }
     }
   }
+
+  // ── Responsividade Fina para Telas Pequenas / Mobile ──
+  @media (max-width: 480px) {
+    padding: 1.1rem 0.65rem 0.95rem;
+    margin-top: 40px;
+    border-radius: 18px;
+
+    .card-watermark-clip {
+      border-radius: 18px;
+      .card-pokeball-watermark {
+        width: 100px;
+        height: 100px;
+        right: -15px;
+        bottom: -15px;
+      }
+    }
+
+    .favorite-btn {
+      width: 28px;
+      height: 28px;
+      top: 8px;
+      right: 8px;
+
+      svg {
+        width: 14px;
+        height: 14px;
+      }
+    }
+
+    .image-wrapper {
+      top: -40px;
+
+      img {
+        width: 88px;
+        height: 88px;
+      }
+    }
+
+    .card-content {
+      margin-top: 48px;
+
+      .pokemon-id {
+        font-size: 0.78rem;
+        margin-bottom: 0.2rem;
+      }
+
+      .pokemon-name {
+        font-size: 1.12rem;
+        margin-bottom: 0.65rem;
+      }
+
+      .types-row {
+        gap: 0.35rem;
+        flex-wrap: wrap;
+
+        .type-badge {
+          padding: 0.22rem 0.6rem;
+          font-size: 0.68rem;
+        }
+      }
+    }
+  }
 }

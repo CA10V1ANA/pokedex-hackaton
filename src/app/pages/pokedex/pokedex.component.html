@@ -340,8 +340,17 @@
 
     </section>
 
+    <!-- Backdrop do Quick View no mobile -->
+    @if (selectedPokemon() !== null || detailLoading()) {
+      <div class="mobile-quickview-backdrop" (click)="selectedPokemon.set(null)" aria-hidden="true"></div>
+    }
+
     <!-- COLUNA DIREITA: Quick View -->
-    <aside class="quick-view-section" aria-label="Detalhes do Pokémon">
+    <aside 
+      class="quick-view-section" 
+      [class.is-mobile-open]="selectedPokemon() !== null || detailLoading()" 
+      aria-label="Detalhes do Pokémon"
+    >
       @if (detailLoading()) {
         <div class="quick-view-skeleton">
           <div class="skeleton-circle lg shimmer"></div>
@@ -360,6 +369,7 @@
           (prev)="onQuickViewPrev()" 
           (next)="onQuickViewNext()" 
           (toggleFavorite)="onToggleFavorite($event)"
+          (close)="selectedPokemon.set(null)"
         />
       }
     </aside>

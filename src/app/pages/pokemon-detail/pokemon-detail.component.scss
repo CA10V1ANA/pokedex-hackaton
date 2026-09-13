@@ -79,6 +79,10 @@
   background: var(--color-bg);
   transition: background 0.4s ease;
 
+  @media (max-width: 640px) {
+    padding: 1rem 0.75rem;
+  }
+
   // ── Coloração Suave e Clara no Fundo da Página (Estilo Pastel) ──
   @each $name, $color in pt.$type-colors {
     &.type-#{$name} {
@@ -98,6 +102,23 @@
     margin-bottom: 2rem;
     flex-wrap: wrap;
     gap: 1rem;
+
+    @media (max-width: 640px) {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+
+      .back-link {
+        justify-content: center;
+        text-align: center;
+      }
+
+      .pager-nav {
+        justify-content: space-between;
+        width: 100%;
+      }
+    }
 
     .back-link {
       display: inline-flex;
@@ -243,54 +264,65 @@
         pointer-events: none;
       }
 
-    @media (max-width: 640px) {
-      grid-template-columns: 1fr;
-    }
-
-    // ── Coloração Suave e Clara no Cartão Central (Estilo Pastel da Referência) ──
-    @each $name, $color in pt.$type-colors {
-      &.type-#{$name} {
-        background: linear-gradient(
-          140deg,
-          color.mix(#ffffff, $color, 65%) 0%,
-          color.mix(#ffffff, $color, 38%) 50%,
-          color.mix(#ffffff, $color, 18%) 100%
-        );
-        border: 1.5px solid rgba(255, 255, 255, 0.65);
-        box-shadow: 0 20px 50px -10px rgba($color, 0.35), 0 4px 16px rgba(0, 0, 0, 0.06);
+      @media (max-width: 640px) {
+        grid-template-columns: 1fr;
+        padding: 1.5rem 1.1rem;
+        border-radius: 22px;
+        gap: 1.5rem;
       }
-    }
 
-    .image-panel {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      img {
-        width: 100%;
-        max-width: 280px;
-        object-fit: contain;
-        filter: drop-shadow(0 16px 24px rgba(0,0,0,0.2));
-        animation: float 3s ease-in-out infinite;
-      }
-    }
-
-    .info-panel {
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-
-      .title-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-
-        .pokemon-name {
-          font-size: 2.5rem;
-          font-weight: 800;
-          color: #222;
-          margin: 0;
+      // ── Coloração Suave e Clara no Cartão Central (Estilo Pastel da Referência) ──
+      @each $name, $color in pt.$type-colors {
+        &.type-#{$name} {
+          background: linear-gradient(
+            140deg,
+            color.mix(#ffffff, $color, 65%) 0%,
+            color.mix(#ffffff, $color, 38%) 50%,
+            color.mix(#ffffff, $color, 18%) 100%
+          );
+          border: 1.5px solid rgba(255, 255, 255, 0.65);
+          box-shadow: 0 20px 50px -10px rgba($color, 0.35), 0 4px 16px rgba(0, 0, 0, 0.06);
         }
+      }
+
+      .image-panel {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        img {
+          width: 100%;
+          max-width: 280px;
+          object-fit: contain;
+          filter: drop-shadow(0 16px 24px rgba(0,0,0,0.2));
+          animation: float 3s ease-in-out infinite;
+
+          @media (max-width: 640px) {
+            max-width: 190px;
+          }
+        }
+      }
+
+      .info-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+
+        .title-row {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+
+          .pokemon-name {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #222;
+            margin: 0;
+
+            @media (max-width: 640px) {
+              font-size: 1.85rem;
+            }
+          }
 
         .detail-favorite-btn {
           background: rgba(0, 0, 0, 0.04);
@@ -392,6 +424,11 @@
         align-items: center;
         gap: 0.6rem;
         margin-bottom: 0.5rem;
+
+        @media (max-width: 420px) {
+          grid-template-columns: 75px 32px 1fr;
+          gap: 0.4rem;
+        }
 
         .stat-name {
           font-size: 0.8rem;

@@ -23,6 +23,7 @@ export class QuickViewComponent {
   @Output() prev = new EventEmitter<void>();
   @Output() next = new EventEmitter<void>();
   @Output() toggleFavorite = new EventEmitter<number>();
+  @Output() close = new EventEmitter<void>();
 
   /**
    * Retorna uma cor semântica para a barra com base na força do atributo.

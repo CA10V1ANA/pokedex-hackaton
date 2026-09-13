@@ -70,6 +70,20 @@
     border-radius: 4px;
   }
 
+  // Pílula indicadora de arrasto / puxador no mobile
+  .mobile-drag-pill {
+    display: none;
+    width: 44px;
+    height: 5px;
+    background: rgba(0, 0, 0, 0.18);
+    border-radius: 10px;
+    margin: 0 auto 0.75rem;
+
+    @media (max-width: 768px) {
+      display: block;
+    }
+  }
+
   // Marca d'água de Pokébola no fundo
   .panel-pokeball-watermark {
     position: absolute;
@@ -181,6 +195,36 @@
 
         &:focus-visible {
           outline: 2px solid #e3350d;
+        }
+      }
+
+      .close-quickview-btn {
+        display: none;
+        background: rgba(0, 0, 0, 0.06);
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        border-radius: 50%;
+        width: 28px;
+        height: 28px;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #4b5563;
+        transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+        @media (max-width: 768px) {
+          display: flex;
+        }
+
+        &:hover {
+          background: #1f242d;
+          color: white;
+          transform: scale(1.1);
+        }
+
+        &:focus-visible {
+          outline: 2px solid #1f242d;
         }
       }
 
