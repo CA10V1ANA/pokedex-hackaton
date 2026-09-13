@@ -42,77 +42,80 @@
         </button>
       </form>
 
-      <!-- Botão Acionador do Painel Lateral de Filtros -->
-      <div class="type-filter-wrapper" [class.has-filter]="selectedType" [class.is-open]="isTypeDropdownOpen()">
-        <button
-          type="button"
-          id="type-select-btn"
-          class="type-select-trigger"
-          (click)="toggleTypeDropdown($event)"
-          [disabled]="isSearchMode()"
-          [attr.aria-expanded]="isTypeDropdownOpen()"
-          aria-haspopup="dialog"
-          aria-label="Abrir filtros de tipo"
-        >
-          <svg class="filter-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
-          </svg>
-
-          @if (selectedType) {
-            <span class="selected-type-badge badge-type-{{ selectedType }}">
-              {{ selectedType | titlecase }}
-            </span>
-          } @else {
-            <span class="placeholder-text">Filtrar por Tipo</span>
-          }
-
-          <svg class="drawer-arrow-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <line x1="4" y1="21" x2="4" y2="14"></line>
-            <line x1="4" y1="10" x2="4" y2="3"></line>
-            <line x1="12" y1="21" x2="12" y2="12"></line>
-            <line x1="12" y1="8" x2="12" y2="3"></line>
-            <line x1="20" y1="21" x2="20" y2="16"></line>
-            <line x1="20" y1="12" x2="20" y2="3"></line>
-            <line x1="1" y1="14" x2="7" y2="14"></line>
-            <line x1="9" y1="8" x2="15" y2="8"></line>
-            <line x1="17" y1="16" x2="23" y2="16"></line>
-          </svg>
-        </button>
-
-        @if (selectedType) {
-          <button 
-            type="button" 
-            class="clear-filter-btn" 
-            (click)="clearTypeFilter($event)" 
-            title="Remover filtro de tipo"
-            aria-label="Remover filtro de tipo"
+      <!-- Grupo de Ações: Filtro de Tipos e Favoritos -->
+      <div class="header-actions-group">
+        <!-- Botão Acionador do Painel Lateral de Filtros -->
+        <div class="type-filter-wrapper" [class.has-filter]="selectedType" [class.is-open]="isTypeDropdownOpen()">
+          <button
+            type="button"
+            id="type-select-btn"
+            class="type-select-trigger"
+            (click)="toggleTypeDropdown($event)"
+            [disabled]="isSearchMode()"
+            [attr.aria-expanded]="isTypeDropdownOpen()"
+            aria-haspopup="dialog"
+            aria-label="Abrir filtros de tipo"
           >
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
+            <svg class="filter-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+            </svg>
+
+            @if (selectedType) {
+              <span class="selected-type-badge badge-type-{{ selectedType }}">
+                {{ selectedType | titlecase }}
+              </span>
+            } @else {
+              <span class="placeholder-text">Filtrar por Tipo</span>
+            }
+
+            <svg class="drawer-arrow-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="4" y1="21" x2="4" y2="14"></line>
+              <line x1="4" y1="10" x2="4" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12" y2="3"></line>
+              <line x1="20" y1="21" x2="20" y2="16"></line>
+              <line x1="20" y1="12" x2="20" y2="3"></line>
+              <line x1="1" y1="14" x2="7" y2="14"></line>
+              <line x1="9" y1="8" x2="15" y2="8"></line>
+              <line x1="17" y1="16" x2="23" y2="16"></line>
             </svg>
           </button>
-        }
-      </div>
 
-      <!-- Botão Rápido de Favoritos no Header Principal -->
-      <button 
-        type="button"
-        class="header-fav-btn"
-        [class.active]="showFavoritesOnly()"
-        (click)="toggleFavoritesFilter()"
-        [disabled]="isSearchMode()"
-        title="Mostrar apenas Pokémons favoritados"
-        aria-label="Filtrar por favoritos"
-      >
-        <svg class="fav-heart-icon" width="15" height="15" viewBox="0 0 24 24" [attr.fill]="showFavoritesOnly() ? 'currentColor' : 'none'" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-        </svg>
-        <span>Favoritos</span>
-        @if (favoritesService.count() > 0) {
-          <span class="fav-count-pill">{{ favoritesService.count() }}</span>
-        }
-      </button>
+          @if (selectedType) {
+            <button 
+              type="button" 
+              class="clear-filter-btn" 
+              (click)="clearTypeFilter($event)" 
+              title="Remover filtro de tipo"
+              aria-label="Remover filtro de tipo"
+            >
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          }
+        </div>
+
+        <!-- Botão Rápido de Favoritos no Header Principal -->
+        <button 
+          type="button"
+          class="header-fav-btn"
+          [class.active]="showFavoritesOnly()"
+          (click)="toggleFavoritesFilter()"
+          [disabled]="isSearchMode()"
+          title="Mostrar apenas Pokémons favoritados"
+          aria-label="Filtrar por favoritos"
+        >
+          <svg class="fav-heart-icon" width="15" height="15" viewBox="0 0 24 24" [attr.fill]="showFavoritesOnly() ? 'currentColor' : 'none'" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          </svg>
+          <span>Favoritos</span>
+          @if (favoritesService.count() > 0) {
+            <span class="fav-count-pill">{{ favoritesService.count() }}</span>
+          }
+        </button>
+      </div>
     </div>
   </header>
 

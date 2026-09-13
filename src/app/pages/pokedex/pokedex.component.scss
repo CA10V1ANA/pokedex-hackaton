@@ -44,57 +44,16 @@
   .header-main {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 1.2rem;
-    flex-wrap: wrap;
-
-    @media (max-width: 768px) {
-      gap: 0.75rem;
-
-      .brand-title {
-        width: 100%;
-        justify-content: flex-start;
-
-        h1 {
-          font-size: 1.55rem;
-        }
-      }
-
-      .search-bar {
-        order: 2;
-        width: 100%;
-        max-width: 100%;
-        min-width: 0;
-
-        input[type="search"] {
-          font-size: 1rem;
-        }
-      }
-
-      .type-filter-wrapper {
-        order: 3;
-        flex: 1;
-        min-width: 0;
-        justify-content: center;
-
-        .type-select-trigger {
-          width: 100%;
-          justify-content: center;
-        }
-      }
-
-      .header-fav-btn {
-        order: 4;
-        flex: 1;
-        min-width: 0;
-        justify-content: center;
-      }
-    }
+    width: 100%;
 
     .brand-title {
       display: flex;
       align-items: center;
       gap: 0.6rem;
       user-select: none;
+      flex-shrink: 0;
 
       .pokeball-svg {
         display: block;
@@ -121,8 +80,8 @@
       align-items: center;
       gap: 0.55rem;
       flex: 1;
-      min-width: 260px;
-      max-width: 480px;
+      min-width: 240px;
+      max-width: 520px;
       background: white;
       border-radius: 50px;
       padding: 0.3rem 0.35rem 0.3rem 1.1rem;
@@ -147,10 +106,11 @@
 
       input[type="search"] {
         flex: 1;
+        min-width: 0; // Previne que o input force estouro de largura no flexbox
         border: none;
         outline: none;
         background: transparent;
-        font-size: 0.9rem;
+        font-size: 0.95rem;
         color: #222;
         padding: 0.35rem 0.2rem;
 
@@ -176,6 +136,7 @@
         color: #666;
         cursor: pointer;
         transition: all 0.2s;
+        flex-shrink: 0;
 
         &:hover {
           background: #1f242d;
@@ -193,6 +154,7 @@
         font-size: 0.85rem;
         font-weight: 600;
         letter-spacing: 0.01em;
+        flex-shrink: 0;
         transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 
         &:hover {
@@ -208,172 +170,253 @@
       }
     }
 
-    // ── Caixa de filtro estilo cápsula (Dropdown Moderno de Tipos) ──
-    .type-filter-wrapper {
-      position: relative;
-      display: inline-flex;
+    // ── Grupo de Ações (Filtros e Favoritos) ──
+    .header-actions-group {
+      display: flex;
       align-items: center;
-      background: white;
-      border-radius: 50px;
-      padding: 0.28rem 0.4rem 0.28rem 0.9rem;
-      border: 1px solid rgba(0, 0, 0, 0.09);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
-      transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      user-select: none;
+      gap: 0.75rem;
+      flex-shrink: 0;
 
-      &:hover {
-        border-color: rgba(0, 0, 0, 0.2);
-        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
-        transform: translateY(-1px);
-      }
-
-      &.is-open {
-        border-color: #1f242d;
-        box-shadow: 0 0 0 3px rgba(31, 36, 45, 0.1);
-        z-index: 130;
-      }
-
-      &.has-filter {
-        border-color: #1f242d;
-        background: #fdfdfd;
-      }
-
-      .type-select-trigger {
+      // Caixa de filtro estilo cápsula (Dropdown Moderno de Tipos)
+      .type-filter-wrapper {
+        position: relative;
         display: inline-flex;
         align-items: center;
-        gap: 0.5rem;
-        background: transparent;
-        border: none;
-        cursor: pointer;
-        padding: 0.2rem 0.35rem 0.2rem 0;
+        background: white;
+        border-radius: 50px;
+        padding: 0.28rem 0.4rem 0.28rem 0.9rem;
+        border: 1px solid rgba(0, 0, 0, 0.09);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+        transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        user-select: none;
+
+        &:hover {
+          border-color: rgba(0, 0, 0, 0.2);
+          box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+          transform: translateY(-1px);
+        }
+
+        &.is-open {
+          border-color: #1f242d;
+          box-shadow: 0 0 0 3px rgba(31, 36, 45, 0.1);
+          z-index: 130;
+        }
+
+        &.has-filter {
+          border-color: #1f242d;
+          background: #fdfdfd;
+        }
+
+        .type-select-trigger {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          background: transparent;
+          border: none;
+          cursor: pointer;
+          padding: 0.2rem 0.35rem 0.2rem 0;
+          font-family: inherit;
+          font-size: 0.9rem;
+          font-weight: 600;
+          color: #2b303a;
+          outline: none;
+
+          &:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+          }
+
+          .filter-icon {
+            color: #71767b;
+            flex-shrink: 0;
+          }
+
+          .placeholder-text {
+            font-size: 0.88rem;
+            color: #4b5563;
+            white-space: nowrap;
+          }
+
+          .selected-type-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.2rem 0.7rem;
+            border-radius: 50px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            text-transform: capitalize;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+          }
+
+          .drawer-arrow-icon {
+            color: #94a3b8;
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            flex-shrink: 0;
+          }
+
+          &:hover .drawer-arrow-icon {
+            color: #1f242d;
+            transform: scale(1.1);
+          }
+        }
+
+        .clear-filter-btn {
+          margin-left: 0.2rem;
+          background: rgba(0, 0, 0, 0.06);
+          border: none;
+          border-radius: 50%;
+          width: 22px;
+          height: 22px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #666;
+          cursor: pointer;
+          transition: all 0.2s;
+          flex-shrink: 0;
+
+          &:hover {
+            background: #1f242d;
+            color: white;
+          }
+        }
+      }
+
+      // Botão de Favoritos no Header
+      .header-fav-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        background: white;
+        border-radius: 50px;
+        padding: 0.45rem 1rem;
+        border: 1px solid rgba(0, 0, 0, 0.09);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
         font-family: inherit;
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         font-weight: 600;
-        color: #2b303a;
-        outline: none;
+        color: #374151;
+        cursor: pointer;
+        transition: all 0.22s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        user-select: none;
+        white-space: nowrap;
+
+        .fav-heart-icon {
+          color: #e3350d;
+          transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+          flex-shrink: 0;
+        }
+
+        .fav-count-pill {
+          background: rgba(227, 53, 13, 0.12);
+          color: #e3350d;
+          font-size: 0.72rem;
+          font-weight: 700;
+          padding: 0.1rem 0.45rem;
+          border-radius: 20px;
+          flex-shrink: 0;
+        }
+
+        &:hover:not(:disabled) {
+          border-color: rgba(227, 53, 13, 0.3);
+          box-shadow: 0 4px 14px rgba(227, 53, 13, 0.12);
+          transform: translateY(-1px);
+
+          .fav-heart-icon {
+            transform: scale(1.15);
+          }
+        }
+
+        &.active {
+          background: #e3350d;
+          color: white;
+          border-color: #e3350d;
+          box-shadow: 0 4px 14px rgba(227, 53, 13, 0.35);
+
+          .fav-heart-icon {
+            color: white;
+          }
+
+          .fav-count-pill {
+            background: white;
+            color: #e3350d;
+          }
+        }
 
         &:disabled {
           opacity: 0.4;
           cursor: not-allowed;
         }
+      }
+    }
 
-        .filter-icon {
-          color: #71767b;
-          flex-shrink: 0;
-        }
+    // ── Breakpoint Tablet & Mobile: Linhas Separadas e Ergonômicas ──
+    @media (max-width: 860px) {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.85rem;
 
-        .placeholder-text {
-          font-size: 0.88rem;
-          color: #4b5563;
-          white-space: nowrap;
-        }
+      .brand-title {
+        width: 100%;
+        justify-content: flex-start;
 
-        .selected-type-badge {
-          display: inline-flex;
-          align-items: center;
-          padding: 0.2rem 0.7rem;
-          border-radius: 50px;
-          font-size: 0.78rem;
-          font-weight: 700;
-          letter-spacing: 0.02em;
-          text-transform: capitalize;
-          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
-        }
-
-        .drawer-arrow-icon {
-          color: #94a3b8;
-          transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-          flex-shrink: 0;
-        }
-
-        &:hover .drawer-arrow-icon {
-          color: #1f242d;
-          transform: scale(1.1);
+        h1 {
+          font-size: 1.6rem;
         }
       }
 
-      .clear-filter-btn {
-        margin-left: 0.2rem;
-        background: rgba(0, 0, 0, 0.06);
-        border: none;
-        border-radius: 50%;
-        width: 22px;
-        height: 22px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #666;
-        cursor: pointer;
-        transition: all 0.2s;
+      .search-bar {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        padding: 0.35rem 0.4rem 0.35rem 1rem;
 
-        &:hover {
-          background: #1f242d;
-          color: white;
+        input[type="search"] {
+          font-size: 1rem; // Previne zoom no iOS Safari
+        }
+      }
+
+      .header-actions-group {
+        width: 100%;
+        display: flex;
+        gap: 0.65rem;
+
+        .type-filter-wrapper {
+          flex: 1;
+          min-width: 0;
+          display: flex;
+          justify-content: center;
+          padding: 0.35rem 0.5rem;
+
+          .type-select-trigger {
+            width: 100%;
+            justify-content: center;
+            padding: 0;
+          }
+        }
+
+        .header-fav-btn {
+          flex: 1;
+          min-width: 0;
+          justify-content: center;
+          padding: 0.45rem 0.6rem;
         }
       }
     }
 
-    // ── Botão de Favoritos no Header ──
-    .header-fav-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.45rem;
-      background: white;
-      border-radius: 50px;
-      padding: 0.45rem 1rem;
-      border: 1px solid rgba(0, 0, 0, 0.09);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
-      font-family: inherit;
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: #374151;
-      cursor: pointer;
-      transition: all 0.22s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      user-select: none;
+    @media (max-width: 400px) {
+      .header-actions-group {
+        gap: 0.5rem;
 
-      .fav-heart-icon {
-        color: #e3350d;
-        transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      }
-
-      .fav-count-pill {
-        background: rgba(227, 53, 13, 0.12);
-        color: #e3350d;
-        font-size: 0.72rem;
-        font-weight: 700;
-        padding: 0.1rem 0.45rem;
-        border-radius: 20px;
-      }
-
-      &:hover:not(:disabled) {
-        border-color: rgba(227, 53, 13, 0.3);
-        box-shadow: 0 4px 14px rgba(227, 53, 13, 0.12);
-        transform: translateY(-1px);
-
-        .fav-heart-icon {
-          transform: scale(1.15);
-        }
-      }
-
-      &.active {
-        background: #e3350d;
-        color: white;
-        border-color: #e3350d;
-        box-shadow: 0 4px 14px rgba(227, 53, 13, 0.35);
-
-        .fav-heart-icon {
-          color: white;
+        .type-filter-wrapper .type-select-trigger .placeholder-text {
+          font-size: 0.8rem;
         }
 
-        .fav-count-pill {
-          background: white;
-          color: #e3350d;
+        .header-fav-btn {
+          font-size: 0.8rem;
+          padding: 0.4rem 0.5rem;
         }
-      }
-
-      &:disabled {
-        opacity: 0.4;
-        cursor: not-allowed;
       }
     }
   }
