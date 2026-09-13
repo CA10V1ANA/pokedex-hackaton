@@ -1,0 +1,177 @@
+@switch (state().status) {
+
+  @case ('loading') {
+    <div class="detail-page">
+      <nav class="top-nav">
+        <a routerLink="/" class="back-link">← Voltar à Pokédex</a>
+      </nav>
+      <div class="detail-skeleton">
+        <div class="skeleton-img shimmer"></div>
+        <div class="skeleton-info">
+          <div class="skeleton-line title shimmer"></div>
+          <div class="skeleton-line badges shimmer"></div>
+          <div class="skeleton-line measure shimmer"></div>
+          <div class="skeleton-line stats shimmer"></div>
+          <div class="skeleton-line stats shimmer"></div>
+        </div>
+      </div>
+    </div>
+  }
+
+  @case ('error') {
+    <div class="page-feedback error">
+      <p>⚠️ {{ $any(state()).message }}</p>
+      <a routerLink="/" class="back-link">← Voltar à Pokédex</a>
+    </div>
+  }
+
+  @case ('success') {
+    @let p = pokemon()!;
+    <div class="detail-page" [ngClass]="'type-' + p.types[0]">
+
+      <!-- Navegação de volta e entre Pokémons -->
+      <nav class="top-nav">
+        <a routerLink="/" class="back-link" aria-label="Voltar à lista">
+          ← Voltar à Pokédex
+        </a>
+
+        <div class="pager-nav">
+          <button 
+            type="button" 
+            class="pager-btn prev"
+            [disabled]="p.id <= 1"
+            (click)="goToPokemon(p.id - 1)"
+            title="Pokémon anterior"
+            aria-label="Pokémon anterior"
+          >
+            ← #{{ padId(p.id - 1) }}
+          </button>
+
+          <span class="pokemon-id">{{ p.paddedId }}</span>
+
+          <button 
+            type="button" 
+            class="pager-btn next"
+            [disabled]="p.id >= 1025"
+            (click)="goToPokemon(p.id + 1)"
+            title="Próximo Pokémon"
+            aria-label="Próximo Pokémon"
+          >
+            #{{ padId(p.id + 1) }} →
+          </button>
+        </div>
+      </nav>
+
+      <div class="detail-wrapper">
+        <!-- Botão lateral flutuante anterior -->
+        <button 
+          type="button" 
+          class="side-arrow prev" 
+          [disabled]="p.id <= 1"
+          (click)="goToPokemon(p.id - 1)" 
+          title="Pokémon anterior (Seta Esquerda)"
+          aria-label="Pokémon anterior"
+        >
+          ‹
+        </button>
+
+        <main class="detail-content" [ngClass]="'type-' + p.types[0]">
+
+          <!-- Marca d'água de Pokébola no fundo -->
+          <svg class="detail-pokeball-watermark" viewBox="0 0 100 100" fill="none" aria-hidden="true">
+            <circle cx="50" cy="50" r="46" stroke="currentColor" stroke-width="8" />
+            <path d="M4 50h34m24 0h34" stroke="currentColor" stroke-width="8" />
+            <circle cx="50" cy="50" r="14" stroke="currentColor" stroke-width="8" fill="white" />
+            <circle cx="50" cy="50" r="6" fill="currentColor" />
+          </svg>
+
+          <!-- Lado esquerdo: imagem grande -->
+          <div class="image-panel">
+            <img
+              [src]="p.imageUrl"
+              [alt]="'Imagem de ' + p.name"
+            />
+          </div>
+
+          <!-- Lado direito: informações -->
+          <div class="info-panel">
+
+            <div class="title-row">
+              <h1 class="pokemon-name">{{ p.name }}</h1>
+              <button 
+                type="button" 
+                class="detail-favorite-btn" 
+                [class.active]="isFavorite()" 
+                (click)="toggleFavorite()"
+                [title]="isFavorite() ? 'Remover dos favoritos' : 'Adicionar aos favoritos'"
+                [attr.aria-label]="isFavorite() ? 'Remover dos favoritos' : 'Adicionar aos favoritos'"
+              >
+                <svg width="22" height="22" viewBox="0 0 24 24" [attr.fill]="isFavorite() ? '#e3350d' : 'none'" [attr.stroke]="isFavorite() ? '#e3350d' : 'currentColor'" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+              </button>
+            </div>
+
+            <div class="types-row">
+              @for (type of p.types; track type) {
+                <span class="type-badge badge-type-{{ type }}">{{ type }}</span>
+              }
+            </div>
+
+            <div class="measurements">
+              <div class="measure">
+                <span class="label">Altura</span>
+                <span class="value">{{ p.heightM }} m</span>
+              </div>
+              <div class="measure">
+                <span class="label">Peso</span>
+                <span class="value">{{ p.weightKg }} kg</span>
+              </div>
+            </div>
+
+            <section class="abilities-section" aria-labelledby="abilities-title">
+              <h2 id="abilities-title">Habilidades</h2>
+              <div class="abilities-list">
+                @for (ability of p.abilities; track ability) {
+                  <span class="ability-badge">{{ ability }}</span>
+                }
+              </div>
+            </section>
+
+            <section class="stats-section" aria-labelledby="stats-title">
+              <h2 id="stats-title">Stats Base</h2>
+              @for (stat of p.stats; track stat.name) {
+                <div class="stat-row">
+                  <span class="stat-name">{{ stat.name }}</span>
+                  <span class="stat-value">{{ stat.value }}</span>
+                  <div class="stat-bar-bg">
+                    <div
+                      class="stat-bar-fill"
+                      [style.width.%]="(stat.value / 255) * 100"
+                      [style.background-color]="getStatColor(stat.value)">
+                    </div>
+                  </div>
+                </div>
+              }
+            </section>
+
+          </div>
+        </main>
+
+        <!-- Botão lateral flutuante próximo -->
+        <button 
+          type="button" 
+          class="side-arrow next" 
+          [disabled]="p.id >= 1025"
+          (click)="goToPokemon(p.id + 1)" 
+          title="Próximo Pokémon (Seta Direita)"
+          aria-label="Próximo Pokémon"
+        >
+          ›
+        </button>
+      </div>
+
+    </div>
+  }
+
+}

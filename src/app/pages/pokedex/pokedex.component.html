@@ -1,0 +1,369 @@
+<div class="pokedex-shell">
+
+  <!-- HEADER com busca e filtros modernos -->
+  <header class="pokedex-header">
+    <div class="header-main">
+      <div class="brand-title">
+        <svg class="pokeball-svg" width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="12" cy="12" r="10" stroke="#222" stroke-width="1.8" fill="white" />
+          <path d="M2.2 12 A9.8 9.8 0 0 1 21.8 12 Z" fill="#e3350d" />
+          <path d="M2.2 12h19.6" stroke="#222" stroke-width="1.8" />
+          <circle cx="12" cy="12" r="3.2" stroke="#222" stroke-width="1.8" fill="white" />
+          <circle cx="12" cy="12" r="1.3" fill="#222" />
+        </svg>
+        <h1>Pokédex</h1>
+      </div>
+
+      <!-- Barra de busca estilo cápsula -->
+      <form class="search-bar" (ngSubmit)="performSearch()" role="search">
+        <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <label for="pokemon-search" class="sr-only">Buscar Pokémon por nome ou ID</label>
+        <input
+          id="pokemon-search"
+          type="search"
+          name="search"
+          [(ngModel)]="searchQuery"
+          placeholder="Buscar por nome ou número (ex: Pikachu, 25)..."
+          autocomplete="off"
+        />
+        @if (isSearchMode()) {
+          <button type="button" class="clear-search-btn" (click)="clearSearch()" aria-label="Limpar busca" title="Limpar busca">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        }
+        <button type="submit" class="search-submit-btn" aria-label="Buscar Pokémon">
+          Buscar
+        </button>
+      </form>
+
+      <!-- Botão Acionador do Painel Lateral de Filtros -->
+      <div class="type-filter-wrapper" [class.has-filter]="selectedType" [class.is-open]="isTypeDropdownOpen()">
+        <button
+          type="button"
+          id="type-select-btn"
+          class="type-select-trigger"
+          (click)="toggleTypeDropdown($event)"
+          [disabled]="isSearchMode()"
+          [attr.aria-expanded]="isTypeDropdownOpen()"
+          aria-haspopup="dialog"
+          aria-label="Abrir filtros de tipo"
+        >
+          <svg class="filter-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+          </svg>
+
+          @if (selectedType) {
+            <span class="selected-type-badge badge-type-{{ selectedType }}">
+              {{ selectedType | titlecase }}
+            </span>
+          } @else {
+            <span class="placeholder-text">Filtrar por Tipo</span>
+          }
+
+          <svg class="drawer-arrow-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="4" y1="21" x2="4" y2="14"></line>
+            <line x1="4" y1="10" x2="4" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12" y2="3"></line>
+            <line x1="20" y1="21" x2="20" y2="16"></line>
+            <line x1="20" y1="12" x2="20" y2="3"></line>
+            <line x1="1" y1="14" x2="7" y2="14"></line>
+            <line x1="9" y1="8" x2="15" y2="8"></line>
+            <line x1="17" y1="16" x2="23" y2="16"></line>
+          </svg>
+        </button>
+
+        @if (selectedType) {
+          <button 
+            type="button" 
+            class="clear-filter-btn" 
+            (click)="clearTypeFilter($event)" 
+            title="Remover filtro de tipo"
+            aria-label="Remover filtro de tipo"
+          >
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        }
+      </div>
+
+      <!-- Botão Rápido de Favoritos no Header Principal -->
+      <button 
+        type="button"
+        class="header-fav-btn"
+        [class.active]="showFavoritesOnly()"
+        (click)="toggleFavoritesFilter()"
+        [disabled]="isSearchMode()"
+        title="Mostrar apenas Pokémons favoritados"
+        aria-label="Filtrar por favoritos"
+      >
+        <svg class="fav-heart-icon" width="15" height="15" viewBox="0 0 24 24" [attr.fill]="showFavoritesOnly() ? 'currentColor' : 'none'" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+        </svg>
+        <span>Favoritos</span>
+        @if (favoritesService.count() > 0) {
+          <span class="fav-count-pill">{{ favoritesService.count() }}</span>
+        }
+      </button>
+    </div>
+  </header>
+
+  <!-- PAINEL LATERAL DESLIZANTE (SIDE DRAWER DE FILTROS) -->
+  @if (isTypeDropdownOpen()) {
+    <div class="drawer-backdrop" (click)="closeTypeDropdown()" aria-hidden="true"></div>
+
+    <aside 
+      class="type-side-drawer" 
+      role="dialog" 
+      aria-label="Painel de filtros por tipo" 
+      aria-modal="true"
+    >
+      <div class="drawer-header">
+        <div class="drawer-header-info">
+          <div class="drawer-icon-capsule">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+            </svg>
+          </div>
+          <div>
+            <h3>Filtros por Tipo</h3>
+            <span class="drawer-subtitle">Selecione para filtrar os Pokémons</span>
+          </div>
+        </div>
+
+        <button 
+          type="button" 
+          class="drawer-close-btn" 
+          (click)="closeTypeDropdown()" 
+          aria-label="Fechar painel lateral"
+          title="Fechar painel (Esc)"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="drawer-body">
+        @if (selectedType) {
+          <div class="drawer-active-bar">
+            <span class="active-tag-label">Filtro Ativo:</span>
+            <span class="active-tag badge-type-{{ selectedType }}">{{ selectedType | titlecase }}</span>
+            <button type="button" class="drawer-clear-link" (click)="clearTypeFilter($event)">
+              Limpar
+            </button>
+          </div>
+        }
+
+        <!-- Opção para ver todos os tipos -->
+        <button
+          type="button"
+          class="drawer-all-option"
+          [class.active]="selectedType === '' && !showFavoritesOnly()"
+          (click)="selectCustomType('')"
+        >
+          <div class="all-option-content">
+            <div class="all-icon-circle">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="7" height="7" rx="1.5"></rect>
+                <rect x="14" y="3" width="7" height="7" rx="1.5"></rect>
+                <rect x="14" y="14" width="7" height="7" rx="1.5"></rect>
+                <rect x="3" y="14" width="7" height="7" rx="1.5"></rect>
+              </svg>
+            </div>
+            <div class="all-text">
+              <span class="all-title">Todos os tipos</span>
+              <span class="all-desc">Exibir Pokémons de todas as categorias</span>
+            </div>
+          </div>
+          @if (selectedType === '' && !showFavoritesOnly()) {
+            <svg class="active-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          }
+        </button>
+
+        <div class="drawer-grid-header">
+          <span>Categorias Elementais</span>
+          <span class="grid-count">{{ availableTypes().length }} tipos</span>
+        </div>
+
+        <!-- Grade com os 18 tipos oficiais -->
+        <div class="drawer-types-grid">
+          @for (type of availableTypes(); track type) {
+            <button
+              type="button"
+              class="drawer-type-chip badge-type-{{ type }}"
+              [class.active]="selectedType === type"
+              (click)="selectCustomType(type)"
+            >
+              <span class="chip-name">{{ type | titlecase }}</span>
+              @if (selectedType === type) {
+                <svg class="chip-check" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              }
+            </button>
+          }
+        </div>
+      </div>
+
+      <div class="drawer-footer">
+        <button type="button" class="drawer-finish-btn" (click)="closeTypeDropdown()">
+          Ver Resultados
+        </button>
+      </div>
+    </aside>
+  }
+
+  <div class="pokedex-body">
+
+    <!-- COLUNA ESQUERDA -->
+    <section class="grid-section" aria-label="Lista de Pokémons">
+
+      <!-- ── MODO SEARCH ── -->
+      @if (isSearchMode()) {
+        @switch (searchState().status) {
+          @case ('loading') {
+            <div class="cards-grid single">
+              <div class="skeleton-card">
+                <div class="skeleton-circle shimmer"></div>
+                <div class="skeleton-line sm shimmer"></div>
+                <div class="skeleton-line md shimmer"></div>
+              </div>
+            </div>
+          }
+          @case ('error') {
+            <div class="empty-results-box">
+              <div class="empty-icon-wrap" aria-hidden="true">🔍</div>
+              <h3>Nenhum Pokémon encontrado</h3>
+              <p>{{ $any(searchState()).message }}</p>
+              <button type="button" class="action-btn" (click)="clearSearch()">← Voltar ao catálogo</button>
+            </div>
+          }
+          @case ('success') {
+            <!-- Exibe o card do resultado encontrado -->
+            <div class="search-result">
+              <p class="search-label">Resultado para "{{ searchQuery }}"</p>
+              <div class="cards-grid single">
+                <app-pokemon-card
+                  [pokemon]="toCard($any(searchState()).data)"
+                  [isFavorite]="favoritesService.isFavorite($any(searchState()).data.id)"
+                  (cardClick)="openPokemonDetail($event)"
+                  (toggleFavorite)="onToggleFavorite($event)"
+                  (filterType)="onCardTypeClick($event)"
+                >
+                </app-pokemon-card>
+              </div>
+              <button type="button" class="back-btn" (click)="clearSearch()">
+                ← Voltar à lista completa
+              </button>
+            </div>
+          }
+        }
+
+      } @else {
+        <!-- ── MODO BROWSE / FAVORITOS ── -->
+        @switch (listState().status) {
+          @case ('loading') {
+            <!-- 12 Cards de Esqueleto Shimmer Animados -->
+            <div class="cards-grid skeleton-grid" aria-label="Carregando Pokémon">
+              @for (i of skeletonCount; track i) {
+                <div class="skeleton-card">
+                  <div class="skeleton-circle shimmer"></div>
+                  <div class="skeleton-line sm shimmer"></div>
+                  <div class="skeleton-line md shimmer"></div>
+                  <div class="skeleton-badges">
+                    <div class="skeleton-badge shimmer"></div>
+                  </div>
+                </div>
+              }
+            </div>
+          }
+          @case ('error') {
+            <div class="state-feedback error">
+              <p>⚠️ {{ $any(listState()).message }}</p>
+              <button type="button" (click)="loadPage(currentPage)">Tentar Novamente</button>
+            </div>
+          }
+          @case ('success') {
+            @if ($any(listState()).data.cards.length === 0) {
+              <!-- Estado Vazio para Favoritos ou Filtro sem resultados -->
+              <div class="empty-results-box">
+                <div class="empty-icon-wrap heart-bounce" aria-hidden="true">❤️</div>
+                @if (showFavoritesOnly()) {
+                  <h3>Você ainda não tem favoritos</h3>
+                  <p>Clique no ícone de coração em qualquer Pokémon para montar seu time favorito!</p>
+                  <button type="button" class="action-btn" (click)="toggleFavoritesFilter()">Explorar Pokédex</button>
+                } @else {
+                  <h3>Nenhum Pokémon encontrado</h3>
+                  <p>Não há Pokémon disponíveis para os filtros selecionados.</p>
+                  <button type="button" class="action-btn" (click)="selectTypeFilter('')">Ver Todos</button>
+                }
+              </div>
+            } @else {
+              <div class="cards-grid">
+                @for (card of $any(listState()).data.cards; track card.id) {
+                  <app-pokemon-card
+                    [pokemon]="card"
+                    [isFavorite]="favoritesService.isFavorite(card.id)"
+                    (cardClick)="openPokemonDetail($event)"
+                    (toggleFavorite)="onToggleFavorite($event)"
+                    (filterType)="onCardTypeClick($event)"
+                  >
+                  </app-pokemon-card>
+                }
+              </div>
+
+              <nav class="pagination" aria-label="Paginação da Pokédex">
+                <button type="button" (click)="goToPrevPage()" [disabled]="currentPage <= 1" aria-label="Página anterior">
+                  ← Anterior
+                </button>
+                <span>{{ currentPage }} / {{ totalPages }}</span>
+                <button type="button" (click)="goToNextPage()" [disabled]="currentPage >= totalPages" aria-label="Próxima página">
+                  Próxima →
+                </button>
+              </nav>
+            }
+          }
+        }
+      }
+
+    </section>
+
+    <!-- COLUNA DIREITA: Quick View -->
+    <aside class="quick-view-section" aria-label="Detalhes do Pokémon">
+      @if (detailLoading()) {
+        <div class="quick-view-skeleton">
+          <div class="skeleton-circle lg shimmer"></div>
+          <div class="skeleton-line lg shimmer"></div>
+          <div class="skeleton-line md shimmer"></div>
+          <div class="skeleton-line stats shimmer"></div>
+          <div class="skeleton-line stats shimmer"></div>
+          <div class="skeleton-line stats shimmer"></div>
+        </div>
+      } @else {
+        <app-quick-view 
+          [pokemon]="selectedPokemon()" 
+          [hasPrev]="hasPrevPokemon" 
+          [hasNext]="hasNextPokemon" 
+          [isFavorite]="selectedPokemon() ? favoritesService.isFavorite(selectedPokemon()!.id) : false"
+          (prev)="onQuickViewPrev()" 
+          (next)="onQuickViewNext()" 
+          (toggleFavorite)="onToggleFavorite($event)"
+        />
+      }
+    </aside>
+
+  </div>
+
+</div>
