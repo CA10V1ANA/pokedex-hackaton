@@ -1,7 +1,7 @@
 <div class="app-layout">
-  <nav class="global-nav">
-    <div class="nav-brand">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+  <nav class="global-nav" [class.open]="isSidebarOpen()">
+    <div class="nav-brand" (click)="toggleSidebar()">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="pokeball-icon">
         <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
         <path d="M2 12h20" stroke="currentColor" stroke-width="2" />
         <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2" fill="var(--surface-color)" />

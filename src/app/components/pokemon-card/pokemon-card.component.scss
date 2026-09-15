@@ -159,10 +159,11 @@
     .types-row {
       display: flex;
       justify-content: center;
-      gap: 0.5rem;
+      gap: 0.4rem;
+      flex-wrap: wrap;
 
       .type-badge {
-        padding: 0.32rem 0.85rem;
+        padding: 0.25rem 0.6rem;
         border-radius: 20px;
         font-size: 0.75rem;
         font-weight: 700;

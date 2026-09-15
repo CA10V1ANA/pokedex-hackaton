@@ -10,4 +10,9 @@ import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 })
 export class App {
   protected readonly title = signal('pokedex-hackaton');
+  isSidebarOpen = signal(false);
+
+  toggleSidebar() {
+    this.isSidebarOpen.update(v => !v);
+  }
 }
