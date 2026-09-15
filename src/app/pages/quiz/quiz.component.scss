@@ -1,0 +1,174 @@
+.quiz-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
+
+  .quiz-header {
+    text-align: center;
+    h2 {
+      font-size: 2rem;
+      color: #1f242d;
+      margin-bottom: 0.5rem;
+    }
+    p {
+      color: #64748b;
+    }
+  }
+
+  .quiz-content {
+    width: 100%;
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .pokemon-image-container {
+    width: 200px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8fafc;
+    border-radius: 50%;
+    border: 4px solid #e2e8f0;
+    transition: all 0.5s ease;
+
+    img {
+      width: 80%;
+      height: 80%;
+      object-fit: contain;
+      filter: brightness(0); // Silhouette!
+      transition: filter 0.8s ease;
+    }
+
+    &.revealed img {
+      filter: none;
+    }
+  }
+
+  .options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    width: 100%;
+
+    @media (max-width: 480px) {
+      grid-template-columns: 1fr;
+    }
+
+    .option-btn {
+      padding: 1rem;
+      border: 2px solid #e2e8f0;
+      background: white;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #334155;
+      cursor: pointer;
+      transition: all 0.2s;
+
+      &:hover:not(:disabled) {
+        border-color: #3b82f6;
+        color: #3b82f6;
+        background: #eff6ff;
+      }
+
+      &.selected {
+        border-color: #3b82f6;
+        background: #eff6ff;
+      }
+
+      &.correct {
+        border-color: #22c55e;
+        background: #f0fdf4;
+        color: #15803d;
+      }
+
+      &.wrong {
+        border-color: #ef4444;
+        background: #fef2f2;
+        color: #b91c1c;
+      }
+
+      &:disabled {
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  .result-message {
+    text-align: center;
+    width: 100%;
+    padding: 1.5rem;
+    border-radius: 12px;
+    animation: fadeIn 0.5s ease;
+
+    &.success {
+      background: #f0fdf4;
+      color: #15803d;
+      h3 { color: #16a34a; }
+    }
+
+    &.error {
+      background: #fef2f2;
+      color: #b91c1c;
+      h3 { color: #dc2626; }
+    }
+
+    h3 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .next-btn {
+      margin-top: 1rem;
+      padding: 0.75rem 1.5rem;
+      background: #1f242d;
+      color: white;
+      border: none;
+      border-radius: 50px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+
+      &:hover {
+        background: #333a46;
+        transform: translateY(-2px);
+      }
+    }
+  }
+
+  .loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    color: #64748b;
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid #e2e8f0;
+      border-top-color: #3b82f6;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+  }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

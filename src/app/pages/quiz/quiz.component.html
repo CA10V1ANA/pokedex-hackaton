@@ -1,0 +1,48 @@
+<div class="quiz-container">
+  <div class="quiz-header">
+    <h2>Quem é esse Pokémon?</h2>
+    <p>Adivinhe qual é o Pokémon pela sua silhueta!</p>
+  </div>
+
+  <div class="quiz-content">
+    @if (status() === 'loading') {
+      <div class="loading-state">
+        <div class="spinner"></div>
+        <p>Procurando um Pokémon selvagem...</p>
+      </div>
+    } @else if (pokemon()) {
+      <div class="pokemon-image-container" [class.revealed]="status() === 'won' || status() === 'lost'">
+        <img [src]="pokemon()?.imageUrl" [alt]="status() === 'playing' ? 'Silhueta Misteriosa' : pokemon()?.name">
+      </div>
+
+      <div class="options-grid">
+        @for (opt of options(); track opt) {
+          <button 
+            type="button" 
+            class="option-btn"
+            [class.selected]="selectedOption() === opt"
+            [class.correct]="(status() === 'won' || status() === 'lost') && opt === pokemon()?.name"
+            [class.wrong]="status() === 'lost' && selectedOption() === opt"
+            [disabled]="status() !== 'playing'"
+            (click)="selectOption(opt)"
+          >
+            {{ opt | titlecase }}
+          </button>
+        }
+      </div>
+
+      @if (status() === 'won' || status() === 'lost') {
+        <div class="result-message" [class.success]="status() === 'won'" [class.error]="status() === 'lost'">
+          @if (status() === 'won') {
+            <h3>Acertou!</h3>
+            <p>É o <strong>{{ pokemon()?.name | titlecase }}</strong>!</p>
+          } @else {
+            <h3>Errou!</h3>
+            <p>O Pokémon correto era <strong>{{ pokemon()?.name | titlecase }}</strong>.</p>
+          }
+          <button type="button" class="next-btn" (click)="startNewGame()">Jogar Novamente</button>
+        </div>
+      }
+    }
+  </div>
+</div>
