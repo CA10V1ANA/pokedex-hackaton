@@ -105,30 +105,66 @@ export class PokemonApiService {
   }
 
   /**
-   * Retorna os cards de uma página de Pokémons filtrados por tipo.
-   *
-   * O endpoint /type/{name} devolve TODOS os Pokémon daquele tipo de uma vez.
-   * A paginação é feita client-side: slicamos o array antes de buscar detalhes.
-   * Isso evita buscar centenas de detalhes de uma vez só.
-   *
-   * Trade-off aceito: o total já é sabido antes de paginar (melhor UX para paginação).
+   * Busca todas as gerações disponíveis na API.
    */
-  getPokemonsByType(typeName: string, limit: number, offset: number): Observable<{ total: number; cards: PokemonCardModel[] }> {
-    return this.http.get<TypeDetailResponse>(`${this.BASE_URL}/type/${typeName}`).pipe(
-      switchMap((typeResponse: TypeDetailResponse) => {
-        const allPokemon = typeResponse.pokemon;
-        const total = allPokemon.length;
+  getGenerations(): Observable<{ name: string; url: string }[]> {
+    return this.http.get<any>(`${this.BASE_URL}/generation`).pipe(
+      map(res => res.results)
+    );
+  }
 
-        // Paginação client-side: pega apenas os N itens da página atual
-        const pageSlice = allPokemon.slice(offset, offset + limit);
+  /**
+   * Retorna os cards filtrados por múltiplos tipos e/ou geração.
+   * Faz a interseção dos resultados no client-side.
+   */
+  getFilteredPokemons(types: string[], generation: string, limit: number, offset: number): Observable<{ total: number; cards: PokemonCardModel[] }> {
+    const requests: Observable<string[]>[] = [];
 
-        if (pageSlice.length === 0) {
-          return [{ total, cards: [] }]; // Página vazia mas não erro
+    // Busca os pokémons de cada tipo selecionado
+    types.forEach(type => {
+      requests.push(
+        this.http.get<TypeDetailResponse>(`${this.BASE_URL}/type/${type}`).pipe(
+          map(res => res.pokemon.map(p => p.pokemon.name))
+        )
+      );
+    });
+
+    // Busca as espécies da geração selecionada
+    if (generation) {
+      requests.push(
+        this.http.get<any>(`${this.BASE_URL}/generation/${generation}`).pipe(
+          map(res => res.pokemon_species.map((s: any) => s.name))
+        )
+      );
+    }
+
+    // Se não há filtros, volta para o getPagedPokemons normal
+    if (requests.length === 0) {
+      return this.getPagedPokemons(limit, offset);
+    }
+
+    return forkJoin(requests).pipe(
+      switchMap((nameArrays: string[][]) => {
+        // Interseção dos arrays (só mantém nomes que existem em TODOS os arrays filtrados)
+        let intersected = nameArrays[0];
+        for (let i = 1; i < nameArrays.length; i++) {
+          const set = new Set(nameArrays[i]);
+          intersected = intersected.filter(name => set.has(name.split('-')[0])); // Trata sufixos de formas alternativas caso a espécie base seja diferente
         }
 
-        const detailRequests = pageSlice.map(entry =>
-          this.getPokemonDetail(entry.pokemon.name)
-        );
+        const total = intersected.length;
+        const pageSlice = intersected.slice(offset, offset + limit);
+
+        if (pageSlice.length === 0) {
+          import('rxjs').then(m => m.of({ total, cards: [] })); // fallback
+          // Retornar um observable vazio em caso de 0 resultados
+          return new Observable<{ total: number; cards: PokemonCardModel[] }>(sub => {
+            sub.next({ total: 0, cards: [] });
+            sub.complete();
+          });
+        }
+
+        const detailRequests = pageSlice.map(name => this.getPokemonDetail(name));
 
         return forkJoin(detailRequests).pipe(
           map(details => ({
