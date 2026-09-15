@@ -2,9 +2,21 @@
   <div class="battle-header">
     <h2>Simulador de Batalha</h2>
     <p>Escolha dois Pokémons e descubra qual deles vence com base no total de status base!</p>
+    
+    <div class="stage-selector">
+      <label for="stageSelect">Estágio:</label>
+      <select id="stageSelect" [ngModel]="currentStageId()" (ngModelChange)="changeStage($event)" [disabled]="stageLoading()">
+        @for (stage of stages; track stage.id) {
+          <option [value]="stage.id">{{ stage.name }}</option>
+        }
+      </select>
+      @if (stageLoading()) {
+        <span class="loading-spinner">Carregando permissões...</span>
+      }
+    </div>
   </div>
 
-  <div class="battle-arena">
+  <div class="battle-arena stage-{{ currentStageId() }}">
     <!-- Jogador 1 -->
     <div class="player-card" [class.winner]="winner() === 1" [class.loser]="winner() === 2">
       <h3>Desafiante 1</h3>
@@ -14,13 +26,27 @@
           <input 
             type="text" 
             [(ngModel)]="search1" 
+            (ngModelChange)="showSuggestions1.set(true)"
+            (focus)="showSuggestions1.set(true)"
+            (blur)="showSuggestions1.set(false)"
             (keyup.enter)="search(1)"
-            placeholder="Nome ou ID (ex: pikachu, 25)"
-            [disabled]="loading1()"
+            placeholder="Nome (ex: pikachu)"
+            [disabled]="loading1() || stageLoading()"
+            autocomplete="off"
           >
-          <button (click)="search(1)" [disabled]="!search1() || loading1()">
+          <button (click)="search(1)" [disabled]="!search1() || loading1() || stageLoading()">
             @if (loading1()) { ⏳ } @else { 🔍 }
           </button>
+
+          @if (showSuggestions1() && suggestions1().length > 0) {
+            <ul class="autocomplete-list">
+              @for (sug of suggestions1(); track sug) {
+                <li (mousedown)="$event.preventDefault(); selectSuggestion(1, sug)">
+                  {{ sug | titlecase }}
+                </li>
+              }
+            </ul>
+          }
         </div>
         <div class="placeholder-sprite"></div>
       } @else {
@@ -73,13 +99,27 @@
           <input 
             type="text" 
             [(ngModel)]="search2" 
+            (ngModelChange)="showSuggestions2.set(true)"
+            (focus)="showSuggestions2.set(true)"
+            (blur)="showSuggestions2.set(false)"
             (keyup.enter)="search(2)"
-            placeholder="Nome ou ID (ex: charizard, 6)"
-            [disabled]="loading2()"
+            placeholder="Nome (ex: charizard)"
+            [disabled]="loading2() || stageLoading()"
+            autocomplete="off"
           >
-          <button (click)="search(2)" [disabled]="!search2() || loading2()">
+          <button (click)="search(2)" [disabled]="!search2() || loading2() || stageLoading()">
             @if (loading2()) { ⏳ } @else { 🔍 }
           </button>
+
+          @if (showSuggestions2() && suggestions2().length > 0) {
+            <ul class="autocomplete-list">
+              @for (sug of suggestions2(); track sug) {
+                <li (mousedown)="$event.preventDefault(); selectSuggestion(2, sug)">
+                  {{ sug | titlecase }}
+                </li>
+              }
+            </ul>
+          }
         </div>
         <div class="placeholder-sprite"></div>
       } @else {

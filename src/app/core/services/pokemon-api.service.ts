@@ -175,4 +175,39 @@ export class PokemonApiService {
       })
     );
   }
+
+  /**
+   * Busca todos os nomes de Pokémons disponíveis (útil para autocomplete global).
+   */
+  getAllPokemonNames(): Observable<string[]> {
+    return this.http.get<PokemonListResponse>(`${this.BASE_URL}/pokemon?limit=10000`).pipe(
+      map(res => res.results.map(p => p.name))
+    );
+  }
+
+  /**
+   * Busca todos os nomes de Pokémons filtrados por um array de tipos (útil para restrição de Estágios).
+   * Retorna uma lista unificada (união, não interseção).
+   */
+  getAllPokemonNamesByTypes(types: string[]): Observable<string[]> {
+    if (!types || types.length === 0) {
+      return this.getAllPokemonNames();
+    }
+    
+    const requests = types.map(type => 
+      this.http.get<TypeDetailResponse>(`${this.BASE_URL}/type/${type}`).pipe(
+        map(res => res.pokemon.map(p => p.pokemon.name))
+      )
+    );
+
+    return forkJoin(requests).pipe(
+      map(nameArrays => {
+        const allNames = new Set<string>();
+        nameArrays.forEach(arr => {
+          arr.forEach(name => allNames.add(name));
+        });
+        return Array.from(allNames);
+      })
+    );
+  }
 }
