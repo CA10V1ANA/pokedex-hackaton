@@ -1,0 +1,86 @@
+<div class="battle-container">
+  <div class="battle-header">
+    <h2>Simulador de Batalha</h2>
+    <p>Escolha dois Pokémons e descubra qual deles vence com base no total de status base!</p>
+  </div>
+
+  <div class="battle-arena">
+    <!-- Jogador 1 -->
+    <div class="player-card" [class.winner]="winner() === 1" [class.loser]="winner() === 2">
+      <h3>Desafiante 1</h3>
+      
+      @if (!pokemon1()) {
+        <div class="search-box">
+          <input 
+            type="text" 
+            [(ngModel)]="search1" 
+            (keyup.enter)="search(1)"
+            placeholder="Nome ou ID (ex: pikachu, 25)"
+            [disabled]="loading1()"
+          >
+          <button (click)="search(1)" [disabled]="!search1() || loading1()">
+            @if (loading1()) { ⏳ } @else { 🔍 }
+          </button>
+        </div>
+        <div class="placeholder-sprite"></div>
+      } @else {
+        <div class="pokemon-display">
+          <button class="clear-btn" (click)="clear(1)" aria-label="Trocar Pokémon">✕</button>
+          <img [src]="pokemon1()?.imageUrl" [alt]="pokemon1()?.name">
+          <h4>{{ pokemon1()?.name | titlecase }}</h4>
+          <p class="stats-total">Status Total: <strong>{{ calculateStats(pokemon1()!) }}</strong></p>
+        </div>
+      }
+    </div>
+
+    <!-- VS Badge -->
+    <div class="vs-badge">VS</div>
+
+    <!-- Jogador 2 -->
+    <div class="player-card" [class.winner]="winner() === 2" [class.loser]="winner() === 1">
+      <h3>Desafiante 2</h3>
+      
+      @if (!pokemon2()) {
+        <div class="search-box">
+          <input 
+            type="text" 
+            [(ngModel)]="search2" 
+            (keyup.enter)="search(2)"
+            placeholder="Nome ou ID (ex: charizard, 6)"
+            [disabled]="loading2()"
+          >
+          <button (click)="search(2)" [disabled]="!search2() || loading2()">
+            @if (loading2()) { ⏳ } @else { 🔍 }
+          </button>
+        </div>
+        <div class="placeholder-sprite"></div>
+      } @else {
+        <div class="pokemon-display">
+          <button class="clear-btn" (click)="clear(2)" aria-label="Trocar Pokémon">✕</button>
+          <img [src]="pokemon2()?.imageUrl" [alt]="pokemon2()?.name">
+          <h4>{{ pokemon2()?.name | titlecase }}</h4>
+          <p class="stats-total">Status Total: <strong>{{ calculateStats(pokemon2()!) }}</strong></p>
+        </div>
+      }
+    </div>
+  </div>
+
+  <div class="battle-actions">
+    @if (pokemon1() && pokemon2() && winner() === null) {
+      <button class="btn-battle" (click)="battle()">Batalhar!</button>
+    }
+  </div>
+
+  @if (winner() !== null) {
+    <div class="battle-result" [class.draw]="winner() === 0">
+      @if (winner() === 0) {
+        <h2>Empate!</h2>
+        <p>Ambos os Pokémons têm a mesma força!</p>
+      } @else {
+        <h2>O Vencedor é:</h2>
+        <h3 class="winner-name">{{ (winner() === 1 ? pokemon1()?.name : pokemon2()?.name) | titlecase }}!</h3>
+      }
+      <button class="btn-reset" (click)="clear(1); clear(2)">Nova Batalha</button>
+    </div>
+  }
+</div>
