@@ -1,23 +1,34 @@
-import { Component, inject, signal, OnInit, HostListener } from '@angular/core';
+import { Component, inject, signal, OnInit, HostListener, WritableSignal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { TitleCasePipe } from '@angular/common';
+import { TitleCasePipe, UpperCasePipe, SlicePipe } from '@angular/common';
 import { forkJoin } from 'rxjs';
 import { PokemonApiService } from '../../core/services/pokemon-api.service';
 import { FavoritesService } from '../../core/services/favorites.service';
 import { PokemonCardModel, PokemonDetailModel } from '../../models/pokemon.models';
 import { RemoteData, idle, loading, success, failure } from '../../models/remote-data.model';
 import { PokemonCardComponent } from '../../components/pokemon-card/pokemon-card.component';
-import { QuickViewComponent } from '../../components/quick-view/quick-view.component';
+import { PokemonModalComponent } from '../../components/pokemon-modal/pokemon-modal.component';
 
 interface PokedexState {
   total: number;
   cards: PokemonCardModel[];
 }
 
+/**
+ * Componente principal da Pokédex (Smart Component).
+ * Gerencia o estado global da listagem, paginação, filtros e modal de detalhes.
+ */
 @Component({
   selector: 'app-pokedex-page',
   standalone: true,
-  imports: [PokemonCardComponent, QuickViewComponent, FormsModule, TitleCasePipe],
+  imports: [
+    PokemonCardComponent, 
+    PokemonModalComponent, 
+    TitleCasePipe, 
+    UpperCasePipe, 
+    SlicePipe, 
+    FormsModule
+  ],
   templateUrl: './pokedex.component.html',
   styleUrl: './pokedex.component.scss'
 })
@@ -42,10 +53,13 @@ export class PokedexPageComponent implements OnInit {
   protected searchQuery = '';
   protected readonly isSearchMode = signal(false);
 
-  // Filtro por tipo
+  // Filtros Avançados
   protected readonly availableTypes = signal<string[]>([]);
-  protected selectedType = '';    // '' = "Todos"
-  protected readonly isTypeDropdownOpen = signal(false);
+  protected readonly availableGenerations = signal<{name: string; url: string}[]>([]);
+  
+  protected selectedTypes = signal<string[]>([]); // max 2
+  protected selectedGeneration = signal<string>(''); 
+  protected readonly isFilterModalOpen = signal(false);
 
   // Filtro por favoritos
   protected readonly showFavoritesOnly = signal(false);
@@ -56,10 +70,16 @@ export class PokedexPageComponent implements OnInit {
   protected totalPages = 1;
 
   ngOnInit(): void {
-    // Carrega a lista de tipos para popular o select
+    // Carrega a lista de tipos
     this.pokemonApi.getTypes().subscribe({
       next: (types) => this.availableTypes.set(types),
       error: () => console.warn('Não foi possível carregar os tipos.')
+    });
+
+    // Carrega a lista de gerações
+    this.pokemonApi.getGenerations().subscribe({
+      next: (gens) => this.availableGenerations.set(gens),
+      error: () => console.warn('Não foi possível carregar as gerações.')
     });
 
     this.loadPage(1);
@@ -80,8 +100,11 @@ export class PokedexPageComponent implements OnInit {
     }
     this.listState.set(loading());
 
-    const request$ = this.selectedType
-      ? this.pokemonApi.getPokemonsByType(this.selectedType, this.pageSize, offset)
+    const types = this.selectedTypes();
+    const gen = this.selectedGeneration();
+
+    const request$ = (types.length > 0 || gen)
+      ? this.pokemonApi.getFilteredPokemons(types, gen, this.pageSize, offset)
       : this.pokemonApi.getPagedPokemons(this.pageSize, offset);
 
     request$.subscribe({
@@ -138,7 +161,8 @@ export class PokedexPageComponent implements OnInit {
 
   toggleFavoritesFilter(): void {
     this.clearSearch(false);
-    this.selectedType = '';
+    this.selectedTypes.set([]);
+    this.selectedGeneration.set('');
     const nextVal = !this.showFavoritesOnly();
     this.showFavoritesOnly.set(nextVal);
     if (nextVal) {
@@ -159,67 +183,51 @@ export class PokedexPageComponent implements OnInit {
     if (this.showFavoritesOnly()) {
       this.showFavoritesOnly.set(false);
     }
-    this.selectTypeFilter(type);
+    this.selectedTypes.set([type]);
+    this.selectedGeneration.set('');
+    this.onFilterChange();
   }
 
-  // ─── FILTRO POR TIPO ──────────────────────────────────────────
+  // ─── FILTROS AVANÇADOS (MODAL) ────────────────────────────────
 
-  toggleTypeDropdown(event?: MouseEvent): void {
+  openFilterModal(): void {
     if (this.isSearchMode()) return;
-    if (event) {
-      event.stopPropagation();
-    }
-    this.isTypeDropdownOpen.update(open => !open);
+    this.isFilterModalOpen.set(true);
   }
 
-  closeTypeDropdown(): void {
-    this.isTypeDropdownOpen.set(false);
+  closeFilterModal(): void {
+    this.isFilterModalOpen.set(false);
   }
 
-  selectCustomType(type: string): void {
-    this.selectedType = type;
-    this.closeTypeDropdown();
-    this.onTypeChange();
-  }
-
-  clearTypeFilter(event?: MouseEvent): void {
-    if (event) {
-      event.stopPropagation();
-    }
-    this.selectedType = '';
-    this.closeTypeDropdown();
-    this.onTypeChange();
-  }
-
-  @HostListener('document:click', ['$event'])
-  onDocumentClick(event: MouseEvent): void {
-    const target = event.target as HTMLElement | null;
-    if (!target?.closest('.type-filter-wrapper') && !target?.closest('.type-side-drawer')) {
-      this.closeTypeDropdown();
+  toggleTypeSelection(type: string): void {
+    const current = this.selectedTypes();
+    if (current.includes(type)) {
+      this.selectedTypes.set(current.filter(t => t !== type));
+    } else if (current.length < 2) {
+      this.selectedTypes.set([...current, type]);
     }
   }
 
-  @HostListener('document:keydown.escape')
-  onEscapeKey(): void {
-    this.closeTypeDropdown();
+  selectGeneration(gen: string): void {
+    this.selectedGeneration.set(this.selectedGeneration() === gen ? '' : gen);
   }
 
-  onTypeChange(): void {
+  clearFilters(): void {
+    this.selectedTypes.set([]);
+    this.selectedGeneration.set('');
+  }
+
+  applyFilters(): void {
+    this.closeFilterModal();
+    this.onFilterChange();
+  }
+
+  onFilterChange(): void {
     if (this.showFavoritesOnly()) {
       this.showFavoritesOnly.set(false);
     }
-    // Ao trocar de tipo, reset de página e sai do modo search (regra C)
     this.clearSearch(false);
     this.loadPage(1);
-  }
-
-  selectTypeFilter(type: string): void {
-    if (this.showFavoritesOnly()) {
-      this.showFavoritesOnly.set(false);
-    }
-    this.selectedType = this.selectedType === type ? '' : type;
-    this.closeTypeDropdown();
-    this.onTypeChange();
   }
 
   // ─── PAGINAÇÃO ────────────────────────────────────────────────
@@ -337,7 +345,8 @@ export class PokedexPageComponent implements OnInit {
     if (!query) return;
 
     // Busca limpa o filtro de tipo (regra C do protocolo)
-    this.selectedType = '';
+    this.selectedTypes.set([]);
+    this.selectedGeneration.set('');
     this.isSearchMode.set(true);
     this.selectedPokemon.set(null);
     this.searchState.set(loading());
