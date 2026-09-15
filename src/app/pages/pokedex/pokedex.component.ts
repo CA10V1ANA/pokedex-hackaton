@@ -7,7 +7,7 @@ import { FavoritesService } from '../../core/services/favorites.service';
 import { PokemonCardModel, PokemonDetailModel } from '../../models/pokemon.models';
 import { RemoteData, idle, loading, success, failure } from '../../models/remote-data.model';
 import { PokemonCardComponent } from '../../components/pokemon-card/pokemon-card.component';
-import { PokemonModalComponent } from '../../components/pokemon-modal/pokemon-modal.component';
+import { QuickViewComponent } from '../../components/quick-view/quick-view.component';
 
 interface PokedexState {
   total: number;
@@ -23,7 +23,7 @@ interface PokedexState {
   standalone: true,
   imports: [
     PokemonCardComponent, 
-    PokemonModalComponent, 
+    QuickViewComponent, 
     TitleCasePipe, 
     UpperCasePipe, 
     SlicePipe, 
