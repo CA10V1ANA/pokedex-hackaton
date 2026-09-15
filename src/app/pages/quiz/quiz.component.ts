@@ -1,12 +1,13 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { TitleCasePipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { PokemonApiService } from '../../core/services/pokemon-api.service';
 import { PokemonDetailModel } from '../../models/pokemon.models';
 
 @Component({
   selector: 'app-quiz',
   standalone: true,
-  imports: [TitleCasePipe],
+  imports: [TitleCasePipe, FormsModule],
   templateUrl: './quiz.component.html',
   styleUrl: './quiz.component.scss'
 })
@@ -15,34 +16,85 @@ export class QuizComponent implements OnInit {
 
   pokemon = signal<PokemonDetailModel | null>(null);
   options = signal<string[]>([]);
-  status = signal<'loading' | 'playing' | 'won' | 'lost'>('loading');
+  status = signal<'setup' | 'loading' | 'playing' | 'won' | 'lost'>('setup');
   selectedOption = signal<string>('');
 
+  // Setup options
+  availableGenerations = signal<{name: string, url: string}[]>([]);
+  availableTypes = signal<string[]>([]);
+  
+  filterMode = signal<'global' | 'generation' | 'type'>('global');
+  filterValue = signal<string>('');
+  
+  poolNames = signal<string[]>([]); // Current pool of allowed pokemon names
+
   ngOnInit() {
-    this.startNewGame();
+    this.api.getGenerations().subscribe(gens => this.availableGenerations.set(gens));
+    this.api.getTypes().subscribe(types => this.availableTypes.set(types));
+  }
+
+  confirmSetup() {
+    this.status.set('loading');
+    
+    if (this.filterMode() === 'global') {
+      this.api.getAllPokemonNames().subscribe(names => {
+        this.poolNames.set(names);
+        this.startNewGame();
+      });
+    } else if (this.filterMode() === 'generation') {
+      this.api.getPokemonNamesByGeneration(this.filterValue()).subscribe(names => {
+        this.poolNames.set(names);
+        this.startNewGame();
+      });
+    } else if (this.filterMode() === 'type') {
+      this.api.getAllPokemonNamesByTypes([this.filterValue()]).subscribe(names => {
+        this.poolNames.set(names);
+        this.startNewGame();
+      });
+    }
+  }
+
+  backToSetup() {
+    this.status.set('setup');
+    this.poolNames.set([]);
   }
 
   startNewGame() {
+    const pool = this.poolNames();
+    if (pool.length < 4) {
+      alert('Não há Pokémons suficientes nesta categoria para o Quiz (mínimo 4).');
+      this.status.set('setup');
+      return;
+    }
+
     this.status.set('loading');
     this.pokemon.set(null);
     this.selectedOption.set('');
     
-    // Pick 4 random IDs between 1 and 1025
-    const ids = Array.from({length: 4}, () => Math.floor(Math.random() * 1025) + 1);
-    const targetId = ids[0];
+    // Pick 4 unique random names
+    const selectedNames = new Set<string>();
+    while(selectedNames.size < 4) {
+      const randomIdx = Math.floor(Math.random() * pool.length);
+      selectedNames.add(pool[randomIdx]);
+    }
+    const namesArray = Array.from(selectedNames);
+    const targetName = namesArray[0];
 
-    // Fetch the target pokemon
-    this.api.getPokemonDetailMapped(targetId).subscribe(detail => {
-      this.pokemon.set(detail);
-      
-      // We just need names for the others, but let's fetch details to be safe
-      // In a real app we'd just fetch the names from the list, but for simplicity:
-      Promise.all(ids.slice(1).map(id => this.api.getPokemonDetailMapped(id).toPromise())).then(others => {
-        const wrongNames = others.map(o => o!.name);
-        const allOptions = [detail.name, ...wrongNames].sort(() => Math.random() - 0.5);
+    // Fetch target details
+    this.api.getPokemonDetailMapped(targetName).subscribe({
+      next: (detail) => {
+        this.pokemon.set(detail);
+        
+        // As the names are already strings, we don't need to fetch the wrong answers' details, 
+        // we can just use their names directly for the buttons!
+        const allOptions = [detail.name, ...namesArray.slice(1)].sort(() => Math.random() - 0.5);
         this.options.set(allOptions);
         this.status.set('playing');
-      });
+      },
+      error: () => {
+        // Fallback in case a specific species form fails to fetch by name
+        this.startNewGame();
+      }
     });
   }
 

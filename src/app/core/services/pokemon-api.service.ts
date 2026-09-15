@@ -210,4 +210,13 @@ export class PokemonApiService {
       })
     );
   }
+
+  /**
+   * Busca todos os nomes de Pokémons de uma geração específica (útil para o Quiz).
+   */
+  getPokemonNamesByGeneration(genName: string): Observable<string[]> {
+    return this.http.get<any>(`${this.BASE_URL}/generation/${genName}`).pipe(
+      map(res => res.pokemon_species.map((s: any) => s.name))
+    );
+  }
 }

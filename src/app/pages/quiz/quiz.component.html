@@ -5,7 +5,61 @@
   </div>
 
   <div class="quiz-content">
-    @if (status() === 'loading') {
+    @if (status() === 'setup') {
+      <div class="setup-card">
+        <h3>Configuração do Quiz</h3>
+        <p>Escolha a dificuldade limitando os Pokémons disponíveis:</p>
+
+        <div class="filter-group">
+          <label>Modo de Jogo:</label>
+          <div class="radio-options">
+            <label>
+              <input type="radio" name="filterMode" [(ngModel)]="filterMode" value="global">
+              Global (Todos os Pokémons)
+            </label>
+            <label>
+              <input type="radio" name="filterMode" [(ngModel)]="filterMode" value="generation">
+              Por Geração / Região
+            </label>
+            <label>
+              <input type="radio" name="filterMode" [(ngModel)]="filterMode" value="type">
+              Por Tipo
+            </label>
+          </div>
+        </div>
+
+        @if (filterMode() === 'generation') {
+          <div class="filter-select">
+            <label>Escolha a Geração:</label>
+            <select [(ngModel)]="filterValue">
+              <option value="" disabled selected>Selecione uma Geração...</option>
+              @for (gen of availableGenerations(); track gen.name) {
+                <option [value]="gen.name">{{ gen.name | titlecase }}</option>
+              }
+            </select>
+          </div>
+        }
+
+        @if (filterMode() === 'type') {
+          <div class="filter-select">
+            <label>Escolha o Tipo:</label>
+            <select [(ngModel)]="filterValue">
+              <option value="" disabled selected>Selecione um Tipo...</option>
+              @for (type of availableTypes(); track type) {
+                <option [value]="type">{{ type | titlecase }}</option>
+              }
+            </select>
+          </div>
+        }
+
+        <button 
+          class="btn-start" 
+          (click)="confirmSetup()"
+          [disabled]="filterMode() !== 'global' && !filterValue()">
+          Iniciar Quiz
+        </button>
+      </div>
+    } @else if (status() === 'loading') {
       <div class="loading-state">
         <div class="radar-spinner"></div>
         <p>Procurando um Pokémon selvagem...</p>
@@ -46,7 +100,10 @@
               <p>O Pokémon correto era <strong>{{ pokemon()?.name | titlecase }}</strong>.</p>
             }
           </div>
-          <button type="button" class="next-btn" (click)="startNewGame()">Jogar Novamente</button>
+          <div class="result-actions">
+            <button type="button" class="next-btn" (click)="startNewGame()">Jogar Novamente</button>
+            <button type="button" class="back-btn" (click)="backToSetup()">Trocar Filtro</button>
+          </div>
         </div>
       }
     }
