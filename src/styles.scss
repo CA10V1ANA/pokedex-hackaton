@@ -75,11 +75,21 @@ body {
 @each $name, $color in pt.$type-colors {
   .badge-type-#{$name} {
     background-color: $color !important;
-    color: #ffffff !important;
+    color: rgba(0, 0, 0, 0.75) !important;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+
+    &::before {
+      content: pt.type-emoji($name);
+      font-size: 0.9em;
+      filter: drop-shadow(0 1px 2px rgba(255, 255, 255, 0.4));
+    }
   }
 }
 
+/* Tratamento especial para o Electric */
 .badge-type-electric {
-  background-color: #F7D02C !important;
+  background-color: #F8D030 !important;
   color: #222222 !important;
 }

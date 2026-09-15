@@ -5,30 +5,55 @@
 ///   background: pt.type-color('fire');
 
 $type-colors: (
-  normal: #A8A77A,
-  fire: #EE8130,
-  water: #6390F0,
-  electric: #F7D02C,
-  grass: #7AC74C,
-  ice: #96D9D6,
-  fighting: #C22E28,
-  poison: #A33EA1,
-  ground: #E2BF65,
-  flying: #A98FF3,
-  psychic: #F95587,
-  bug: #A6B91A,
-  rock: #B6A136,
-  ghost: #735797,
-  dragon: #6F35FC,
-  dark: #705746,
-  steel: #B7B7CE,
-  fairy: #D685AD
+  normal: #A8A878,
+  fire: #F08030,
+  water: #6890F0,
+  electric: #F8D030,
+  grass: #78C850,
+  ice: #98D8D8,
+  fighting: #C03028,
+  poison: #A040A0,
+  ground: #E0C068,
+  flying: #A890F0,
+  psychic: #F85888,
+  bug: #A8B820,
+  rock: #B8A038,
+  ghost: #705898,
+  dragon: #7038F8,
+  dark: #705848,
+  steel: #B8B8D0,
+  fairy: #EE99AC
+);
+
+$type-emojis: (
+  normal: '⭐',
+  fire: '🔥',
+  water: '💧',
+  electric: '⚡',
+  grass: '🌿',
+  ice: '❄️',
+  fighting: '🥊',
+  poison: '☠️',
+  ground: '⛰️',
+  flying: '🕊️',
+  psychic: '🔮',
+  bug: '🐛',
+  rock: '🪨',
+  ghost: '👻',
+  dragon: '🐉',
+  dark: '🌙',
+  steel: '⚙️',
+  fairy: '✨'
 );
 
 /// Retorna a cor de um tipo pelo nome (string).
 /// Uso: color: type-color('fire');
 @function type-color($name) {
   @return map-get($type-colors, $name);
+}
+
+@function type-emoji($name) {
+  @return map-get($type-emojis, $name);
 }
 
 /// Mixin que gera as classes .type-{nome} com gradiente e sombra hover.

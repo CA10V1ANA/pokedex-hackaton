@@ -148,9 +148,11 @@
                 type="button"
                 class="filter-chip gen-chip"
                 [class.active]="selectedGeneration() === gen.name"
+                [title]="getRegionName(gen.name)"
                 (click)="selectGeneration(gen.name)"
               >
-                {{ gen.name | uppercase | slice:11 }}
+                <div class="gen-number">{{ gen.name | uppercase | slice:11 }}</div>
+                <div class="gen-region">{{ getRegionName(gen.name) }}</div>
               </button>
             }
           </div>
