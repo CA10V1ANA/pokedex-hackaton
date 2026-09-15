@@ -38,7 +38,12 @@ html {
 
 body {
   font-family: var(--font-base);
-  background-color: var(--color-bg);
+  background-color: #f4f7f6;
+  background-image: 
+    radial-gradient(#cbd5e1 1.5px, transparent 1.5px),
+    radial-gradient(#cbd5e1 1.5px, transparent 1.5px);
+  background-size: 40px 40px;
+  background-position: 0 0, 20px 20px;
   color: var(--color-text);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
