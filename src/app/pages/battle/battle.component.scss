@@ -150,46 +150,140 @@
           position: absolute;
           top: -10px;
           right: -10px;
-          width: 30px;
-          height: 30px;
+          width: 32px;
+          height: 32px;
           border-radius: 50%;
           background: #f1f5f9;
           border: 1px solid #cbd5e1;
           cursor: pointer;
           font-weight: bold;
           color: #64748b;
+          z-index: 10;
+          transition: all 0.2s;
 
           &:hover {
             background: #ef4444;
             color: white;
             border-color: #ef4444;
+            transform: scale(1.1);
           }
         }
 
-        img {
-          width: 150px;
-          height: 150px;
-          object-fit: contain;
-          filter: drop-shadow(0 10px 10px rgba(0,0,0,0.15));
-        }
-
-        h4 {
-          font-size: 1.5rem;
-          margin-top: 1rem;
-          color: #1f242d;
-        }
-
-        .stats-total {
-          margin-top: 0.5rem;
-          font-size: 1.1rem;
-          color: #64748b;
-          background: #f8fafc;
-          padding: 0.5rem 1rem;
-          border-radius: 50px;
+        .image-wrapper {
+          width: 160px;
+          height: 160px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-bottom: 0.5rem;
           
-          strong {
-            color: #1f242d;
-            font-size: 1.2rem;
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 12px 16px rgba(0,0,0,0.2));
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+          }
+        }
+
+        &:hover .image-wrapper img {
+          transform: scale(1.1) translateY(-5px);
+        }
+
+        .pokemon-info {
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+
+          .pokemon-id {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            font-weight: 700;
+          }
+
+          h4 {
+            font-size: 1.6rem;
+            margin: 0.2rem 0 0.8rem 0;
+            color: #1e293b;
+            font-weight: 800;
+          }
+
+          .types-row {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+
+            span {
+              padding: 0.35rem 0.8rem;
+              border-radius: 20px;
+              font-size: 0.75rem;
+              font-weight: 700;
+              letter-spacing: 0.05em;
+              box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            }
+          }
+
+          .stats-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+
+            .stat-row {
+              display: flex;
+              align-items: center;
+              gap: 0.75rem;
+
+              .stat-name {
+                width: 55px;
+                font-size: 0.7rem;
+                font-weight: 700;
+                color: #64748b;
+                text-align: right;
+              }
+
+              .stat-value {
+                width: 30px;
+                font-size: 0.85rem;
+                font-weight: 700;
+                color: #334155;
+              }
+
+              .stat-bar-bg {
+                flex: 1;
+                height: 8px;
+                background: #e2e8f0;
+                border-radius: 4px;
+                overflow: hidden;
+
+                .stat-bar-fill {
+                  height: 100%;
+                  background: linear-gradient(90deg, #3b82f6, #60a5fa);
+                  border-radius: 4px;
+                  transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
+                }
+              }
+
+              &.total-row {
+                margin-top: 0.5rem;
+                padding-top: 0.5rem;
+                border-top: 1px dashed #cbd5e1;
+
+                .stat-name {
+                  color: #1e293b;
+                }
+                .stat-value {
+                  width: auto;
+                  font-size: 1.1rem;
+                  color: #e3350d;
+                }
+              }
+            }
           }
         }
       }

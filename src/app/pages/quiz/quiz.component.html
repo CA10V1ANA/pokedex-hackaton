@@ -7,11 +7,12 @@
   <div class="quiz-content">
     @if (status() === 'loading') {
       <div class="loading-state">
-        <div class="spinner"></div>
+        <div class="radar-spinner"></div>
         <p>Procurando um Pokémon selvagem...</p>
       </div>
     } @else if (pokemon()) {
       <div class="pokemon-image-container" [class.revealed]="status() === 'won' || status() === 'lost'">
+        <div class="mystery-bg"></div>
         <img [src]="pokemon()?.imageUrl" [alt]="status() === 'playing' ? 'Silhueta Misteriosa' : pokemon()?.name">
       </div>
 
@@ -26,20 +27,25 @@
             [disabled]="status() !== 'playing'"
             (click)="selectOption(opt)"
           >
-            {{ opt | titlecase }}
+            <span class="opt-text">{{ opt | titlecase }}</span>
           </button>
         }
       </div>
 
       @if (status() === 'won' || status() === 'lost') {
         <div class="result-message" [class.success]="status() === 'won'" [class.error]="status() === 'lost'">
-          @if (status() === 'won') {
-            <h3>Acertou!</h3>
-            <p>É o <strong>{{ pokemon()?.name | titlecase }}</strong>!</p>
-          } @else {
-            <h3>Errou!</h3>
-            <p>O Pokémon correto era <strong>{{ pokemon()?.name | titlecase }}</strong>.</p>
-          }
+          <div class="result-icon">
+            {{ status() === 'won' ? '🎉' : '❌' }}
+          </div>
+          <div class="result-text">
+            @if (status() === 'won') {
+              <h3>Acertou!</h3>
+              <p>É o <strong>{{ pokemon()?.name | titlecase }}</strong>!</p>
+            } @else {
+              <h3>Errou!</h3>
+              <p>O Pokémon correto era <strong>{{ pokemon()?.name | titlecase }}</strong>.</p>
+            }
+          </div>
           <button type="button" class="next-btn" (click)="startNewGame()">Jogar Novamente</button>
         </div>
       }

@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { TitleCasePipe } from '@angular/common';
+import { TitleCasePipe, UpperCasePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PokemonApiService } from '../../core/services/pokemon-api.service';
 import { PokemonDetailModel } from '../../models/pokemon.models';
@@ -7,7 +7,7 @@ import { PokemonDetailModel } from '../../models/pokemon.models';
 @Component({
   selector: 'app-battle',
   standalone: true,
-  imports: [TitleCasePipe, FormsModule],
+  imports: [TitleCasePipe, UpperCasePipe, FormsModule],
   templateUrl: './battle.component.html',
   styleUrl: './battle.component.scss'
 })

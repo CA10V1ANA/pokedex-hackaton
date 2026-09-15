@@ -26,9 +26,37 @@
       } @else {
         <div class="pokemon-display">
           <button class="clear-btn" (click)="clear(1)" aria-label="Trocar Pokémon">✕</button>
-          <img [src]="pokemon1()?.imageUrl" [alt]="pokemon1()?.name">
-          <h4>{{ pokemon1()?.name | titlecase }}</h4>
-          <p class="stats-total">Status Total: <strong>{{ calculateStats(pokemon1()!) }}</strong></p>
+          
+          <div class="image-wrapper">
+            <img [src]="pokemon1()?.imageUrl" [alt]="pokemon1()?.name">
+          </div>
+          
+          <div class="pokemon-info">
+            <span class="pokemon-id">{{ pokemon1()?.paddedId }}</span>
+            <h4>{{ pokemon1()?.name | titlecase }}</h4>
+            
+            <div class="types-row">
+              @for (type of pokemon1()?.types; track type) {
+                <span class="badge-type-{{ type }}">{{ type | uppercase }}</span>
+              }
+            </div>
+
+            <div class="stats-container">
+              @for (stat of pokemon1()?.stats; track stat.name) {
+                <div class="stat-row">
+                  <span class="stat-name">{{ stat.name | uppercase }}</span>
+                  <span class="stat-value">{{ stat.value }}</span>
+                  <div class="stat-bar-bg">
+                    <div class="stat-bar-fill" [style.width.%]="(stat.value / 255) * 100"></div>
+                  </div>
+                </div>
+              }
+              <div class="stat-row total-row">
+                <span class="stat-name">TOTAL</span>
+                <span class="stat-value"><strong>{{ calculateStats(pokemon1()!) }}</strong></span>
+              </div>
+            </div>
+          </div>
         </div>
       }
     </div>
@@ -57,9 +85,37 @@
       } @else {
         <div class="pokemon-display">
           <button class="clear-btn" (click)="clear(2)" aria-label="Trocar Pokémon">✕</button>
-          <img [src]="pokemon2()?.imageUrl" [alt]="pokemon2()?.name">
-          <h4>{{ pokemon2()?.name | titlecase }}</h4>
-          <p class="stats-total">Status Total: <strong>{{ calculateStats(pokemon2()!) }}</strong></p>
+          
+          <div class="image-wrapper">
+            <img [src]="pokemon2()?.imageUrl" [alt]="pokemon2()?.name">
+          </div>
+          
+          <div class="pokemon-info">
+            <span class="pokemon-id">{{ pokemon2()?.paddedId }}</span>
+            <h4>{{ pokemon2()?.name | titlecase }}</h4>
+            
+            <div class="types-row">
+              @for (type of pokemon2()?.types; track type) {
+                <span class="badge-type-{{ type }}">{{ type | uppercase }}</span>
+              }
+            </div>
+
+            <div class="stats-container">
+              @for (stat of pokemon2()?.stats; track stat.name) {
+                <div class="stat-row">
+                  <span class="stat-name">{{ stat.name | uppercase }}</span>
+                  <span class="stat-value">{{ stat.value }}</span>
+                  <div class="stat-bar-bg">
+                    <div class="stat-bar-fill" [style.width.%]="(stat.value / 255) * 100"></div>
+                  </div>
+                </div>
+              }
+              <div class="stat-row total-row">
+                <span class="stat-name">TOTAL</span>
+                <span class="stat-value"><strong>{{ calculateStats(pokemon2()!) }}</strong></span>
+              </div>
+            </div>
+          </div>
         </div>
       }
     </div>
