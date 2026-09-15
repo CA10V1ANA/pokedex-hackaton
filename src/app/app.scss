@@ -112,7 +112,8 @@
 
 .app-main-content {
   flex: 1;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
   order: 1;
   
   @media (min-width: 768px) {
