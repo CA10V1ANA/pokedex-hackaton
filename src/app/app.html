@@ -1,6 +1,36 @@
-<!-- 
-  Ponto de entrada do roteador Angular.
-  O <router-outlet> renderiza o componente correspondente à rota ativa.
-  Quando a URL for '/', o PokedexPageComponent será renderizado aqui.
--->
-<router-outlet />
+<div class="app-layout">
+  <nav class="global-nav">
+    <div class="nav-brand">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
+        <path d="M2 12h20" stroke="currentColor" stroke-width="2" />
+        <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2" fill="var(--surface-color)" />
+      </svg>
+      <span class="brand-text">PokéApp</span>
+    </div>
+    <ul class="nav-links">
+      <li>
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+          <span class="nav-icon">📖</span>
+          <span class="nav-label">Pokédex</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/quiz" routerLinkActive="active">
+          <span class="nav-icon">❓</span>
+          <span class="nav-label">Quiz</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/battle" routerLinkActive="active">
+          <span class="nav-icon">⚔️</span>
+          <span class="nav-label">Batalha</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <main class="app-main-content">
+    <router-outlet />
+  </main>
+</div>

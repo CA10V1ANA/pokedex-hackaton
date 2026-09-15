@@ -9,6 +9,17 @@ export const routes: Routes = [
       import('./pages/pokemon-detail/pokemon-detail.component')
         .then(m => m.PokemonDetailComponent)
   },
+  {
+    path: 'quiz',
+    loadComponent: () =>
+      import('./pages/quiz/quiz.component')
+        .then(m => m.QuizComponent)
+  },
+  {
+    path: 'battle',
+    loadComponent: () =>
+      import('./pages/battle/battle.component')
+        .then(m => m.BattleComponent)
+  },
   { path: '**', redirectTo: '' }
 ];
-

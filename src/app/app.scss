@@ -1,0 +1,121 @@
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+  }
+}
+
+.global-nav {
+  display: flex;
+  background-color: var(--surface-color);
+  border-top: 1px solid var(--border-color);
+  padding: 0.5rem;
+  z-index: 1000;
+  order: 2; /* Bottom on mobile */
+  justify-content: space-around;
+  
+  @media (min-width: 768px) {
+    flex-direction: column;
+    order: 1; /* Left on desktop */
+    border-top: none;
+    border-right: 1px solid var(--border-color);
+    width: 250px;
+    padding: 1.5rem 1rem;
+    justify-content: flex-start;
+    gap: 2rem;
+  }
+
+  .nav-brand {
+    display: none;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--primary-color);
+    padding: 0 1rem;
+    
+    @media (min-width: 768px) {
+      display: flex;
+    }
+
+    .brand-text {
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+  }
+
+  .nav-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+    
+    @media (min-width: 768px) {
+      flex-direction: column;
+      gap: 0.5rem;
+      justify-content: flex-start;
+    }
+
+    li {
+      width: 100%;
+    }
+
+    a {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.5rem;
+      color: var(--text-secondary);
+      text-decoration: none;
+      border-radius: var(--radius-md);
+      transition: all 0.2s ease;
+      
+      @media (min-width: 768px) {
+        flex-direction: row;
+        padding: 0.75rem 1rem;
+        gap: 0.75rem;
+      }
+
+      &:hover {
+        background-color: var(--surface-hover);
+        color: var(--text-primary);
+      }
+
+      &.active {
+        color: var(--primary-color);
+        background-color: color-mix(in srgb, var(--primary-color) 10%, transparent);
+        font-weight: 600;
+      }
+    }
+
+    .nav-icon {
+      font-size: 1.25rem;
+      line-height: 1;
+    }
+
+    .nav-label {
+      font-size: 0.75rem;
+      
+      @media (min-width: 768px) {
+        font-size: 1rem;
+      }
+    }
+  }
+}
+
+.app-main-content {
+  flex: 1;
+  overflow: hidden;
+  order: 1;
+  
+  @media (min-width: 768px) {
+    order: 2;
+  }
+}
