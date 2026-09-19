@@ -27,6 +27,14 @@
           <span class="nav-label">Batalha</span>
         </a>
       </li>
+    
+      <!-- Dark Mode Toggle -->
+      <li class="theme-toggle">
+        <a href="#" (click)="toggleTheme(); $event.preventDefault()" [attr.aria-label]="isDarkMode() ? 'Ativar Modo Claro' : 'Ativar Modo Escuro'">
+          <span class="nav-icon">{{ isDarkMode() ? '☀️' : '🌙' }}</span>
+          <span class="nav-label">{{ isDarkMode() ? 'Modo Claro' : 'Modo Escuro' }}</span>
+        </a>
+      </li>
     </ul>
   </nav>
 

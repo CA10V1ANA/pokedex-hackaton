@@ -98,3 +98,18 @@ body {
   background-color: #F8D030 !important;
   color: #222222 !important;
 }
+
+
+/* =========================================
+   DARK THEME OVERRIDES
+   ========================================= */
+body.dark-theme {
+  --color-brand: #e3350d;
+  --color-brand-dark: #b22a0a;
+  --color-bg: #111827;
+  --color-surface: rgba(31, 41, 55, 0.85);
+  --color-text: #f9fafb;
+  --color-text-muted: #9ca3af;
+  --color-border: rgba(255, 255, 255, 0.1);
+  background-image: none; /* Layout mais limpo no escuro */
+}
