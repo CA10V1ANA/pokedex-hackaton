@@ -34,6 +34,7 @@ interface PokedexState {
   styleUrl: './pokedex.component.scss'
 })
 export class PokedexPageComponent implements OnInit {
+  public i18n = inject(TranslationService);
   private readonly pokemonApi = inject(PokemonApiService);
   readonly favoritesService = inject(FavoritesService);
 
