@@ -72,7 +72,7 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    color: #6b7280;
+    color: var(--color-text-muted);
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
     transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     z-index: 5;
@@ -161,7 +161,7 @@
 
     .pokemon-name {
       font-size: 1.35rem;
-      color: #1a202c;
+      color: var(--color-text);
       margin: 0 0 1rem 0;
       text-transform: capitalize;
       font-weight: 800;

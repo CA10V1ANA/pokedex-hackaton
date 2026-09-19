@@ -35,7 +35,7 @@
 
   p {
     font-size: 0.85rem;
-    color: #888;
+    color: var(--color-text-muted);
     line-height: 1.6;
     max-width: 220px;
   }
@@ -156,7 +156,7 @@
       .pokemon-id {
         font-size: 0.9rem;
         font-weight: 700;
-        color: #888;
+        color: var(--color-text-muted);
         min-width: 44px;
         text-align: center;
       }
@@ -177,7 +177,7 @@
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        color: #888;
+        color: var(--color-text-muted);
         transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 
         &:hover {
@@ -210,7 +210,7 @@
         cursor: pointer;
         font-size: 0.85rem;
         font-weight: 700;
-        color: #4b5563;
+        color: var(--color-text);
         transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 
         @media (max-width: 768px) {
@@ -335,7 +335,7 @@
 
       .stat-name {
         font-size: 0.75rem;
-        color: #666;
+        color: var(--color-text-muted);
         text-transform: capitalize;
       }
 

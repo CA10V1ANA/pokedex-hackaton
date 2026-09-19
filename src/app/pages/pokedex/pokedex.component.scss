@@ -95,12 +95,12 @@
       }
 
       &:focus-within {
-        border-color: #1f242d;
+        border-color: var(--color-text);
         box-shadow: 0 0 0 3px rgba(31, 36, 45, 0.1);
       }
 
       .search-icon {
-        color: #8c9199;
+        color: var(--color-text-muted);
         flex-shrink: 0;
       }
 
@@ -115,7 +115,7 @@
         padding: 0.35rem 0.2rem;
 
         &::placeholder {
-          color: #9aa0a6;
+          color: var(--color-text-muted);
           font-size: 0.88rem;
         }
 
@@ -133,7 +133,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        color: #666;
+        color: var(--color-text-muted);
         cursor: pointer;
         transition: all 0.2s;
         flex-shrink: 0;
@@ -197,13 +197,13 @@
         }
 
         &.is-open {
-          border-color: #1f242d;
+          border-color: var(--color-text);
           box-shadow: 0 0 0 3px rgba(31, 36, 45, 0.1);
           z-index: 130;
         }
 
         &.has-filter {
-          border-color: #1f242d;
+          border-color: var(--color-text);
           background: #fdfdfd;
         }
 
@@ -218,7 +218,7 @@
           font-family: inherit;
           font-size: 0.9rem;
           font-weight: 600;
-          color: #2b303a;
+          color: var(--color-text);
           outline: none;
 
           &:disabled {
@@ -227,13 +227,13 @@
           }
 
           .filter-icon {
-            color: #71767b;
+            color: var(--color-text-muted);
             flex-shrink: 0;
           }
 
           .placeholder-text {
             font-size: 0.88rem;
-            color: #4b5563;
+            color: var(--color-text);
             white-space: nowrap;
           }
 
@@ -256,7 +256,7 @@
           }
 
           &:hover .drawer-arrow-icon {
-            color: #1f242d;
+            color: var(--color-text);
             transform: scale(1.1);
           }
         }
@@ -271,7 +271,7 @@
           display: flex;
           align-items: center;
           justify-content: center;
-          color: #666;
+          color: var(--color-text-muted);
           cursor: pointer;
           transition: all 0.2s;
           flex-shrink: 0;
@@ -490,7 +490,7 @@
     .filter-section {
       h3 {
         font-size: 1rem;
-        color: #64748b;
+        color: var(--color-text-muted);
         margin-bottom: 1rem;
       }
 
@@ -528,7 +528,7 @@
           }
 
           &.active {
-            border-color: #1f242d;
+            border-color: var(--color-text);
             box-shadow: 0 0 0 2px #1f242d;
             transform: scale(1.02);
 
@@ -573,7 +573,7 @@
     .btn-clear {
       background: transparent;
       border: 1px solid #e2e8f0;
-      color: #64748b;
+      color: var(--color-text-muted);
 
       &:hover {
         background: #f8fafc;
@@ -715,7 +715,7 @@
 
   p {
     font-size: 0.95rem;
-    color: #777;
+    color: var(--color-text-muted);
     max-width: 360px;
     line-height: 1.5;
   }
@@ -873,7 +873,7 @@
 
   span {
     font-weight: 600;
-    color: #555;
+    color: var(--color-text-muted);
     min-width: 80px;
     text-align: center;
   }
@@ -912,7 +912,7 @@
   gap: 1rem;
 
   &.loading {
-    color: #888;
+    color: var(--color-text-muted);
   }
 
   &.error {
