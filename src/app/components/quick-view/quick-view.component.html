@@ -29,23 +29,25 @@
     </svg>
 
     <div class="header">
-      <div class="nav-controls" style="display: flex; gap: 8px; font-weight: bold;">
+      <div class="nav-controls" style="display: flex; gap: 8px; font-weight: bold; align-items: center; justify-content: center;">
         <button 
           type="button" 
           class="nav-btn prev-btn" 
           [disabled]="!hasPrev" 
           (click)="prev.emit()" 
-          title="PokǸmon anterior">
-          ? Anterior
+          title="Pok&eacute;mon anterior"
+          style="background: none; border: none; font-size: 1.2rem; cursor: pointer; color: inherit; opacity: hasPrev ? 1 : 0.3;">
+          &larr;
         </button>
-        <span class="pokemon-id" style="margin: 0 10px;">{{ pokemon.paddedId }}</span>
+        <span class="pokemon-id">{{ pokemon.paddedId }}</span>
         <button 
           type="button" 
           class="nav-btn next-btn" 
           [disabled]="!hasNext" 
           (click)="next.emit()" 
-          title="Prximo PokǸmon">
-          Prximo '
+          title="Pr&oacute;ximo Pok&eacute;mon"
+          style="background: none; border: none; font-size: 1.2rem; cursor: pointer; color: inherit; opacity: hasNext ? 1 : 0.3;">
+          &rarr;
         </button>
       </div>
 

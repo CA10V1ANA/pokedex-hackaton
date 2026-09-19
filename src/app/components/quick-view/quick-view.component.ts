@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { StatRowComponent } from '../stat-row/stat-row.component';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { NgClass } from '@angular/common';
@@ -11,6 +12,8 @@ import { PokemonDetailModel } from '../../models/pokemon.models';
   styleUrl: './quick-view.component.scss'
 })
 export class QuickViewComponent {
+  constructor(private router: Router) {}
+
   /**
    * Quando null, o painel exibe o estado vazio ("Selecione um Pokémon").
    * Quando preenchido, exibe os dados completos.
@@ -29,8 +32,10 @@ export class QuickViewComponent {
 
   
   sendToSimulator() {
-    alert('Simulador de Batalha em construção! PokǸmon ' + this.pokemon?.name + ' carregado na arena.');
-    // Aqui no futuro injetamos no serviço de batalha
+    if (this.pokemon) {
+      this.router.navigate(['/battle'], { queryParams: { p1: this.pokemon.id } });
+      this.close.emit();
+    }
   }
 
   formatStatName(name: string): string {
