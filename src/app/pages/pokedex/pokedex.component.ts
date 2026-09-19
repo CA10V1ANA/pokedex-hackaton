@@ -1,3 +1,4 @@
+import { TranslationService } from '../../core/services/translation.service';
 import { Component, inject, signal, OnInit, HostListener, WritableSignal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TitleCasePipe, UpperCasePipe, SlicePipe } from '@angular/common';

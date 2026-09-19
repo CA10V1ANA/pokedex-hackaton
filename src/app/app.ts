@@ -1,20 +1,23 @@
+import { TranslationService } from './core/services/translation.service';
 import { Component, signal, OnInit, Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive],
+  imports: [FormsModule, RouterOutlet, RouterLink, RouterLinkActive],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
 export class App implements OnInit {
-  constructor(@Inject(DOCUMENT) private document: Document) {}
+  constructor(@Inject(DOCUMENT) private document: Document, public i18n: TranslationService) {}
   
   isDarkMode = signal(false);
 
   ngOnInit() {
+    this.i18n.initLang();
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
       this.isDarkMode.set(true);

@@ -29,7 +29,7 @@
   h3 {
     font-size: 1.05rem;
     font-weight: 700;
-    color: #444;
+    color: var(--color-text);
     margin: 0;
   }
 
@@ -54,7 +54,7 @@
   overflow-y: auto;
   overflow-x: hidden;
   transition: background 0.4s ease;
-  background: rgba(255, 255, 255, 0.85);
+  background: var(--color-surface);
   backdrop-filter: blur(12px);
   scrollbar-width: thin;
   scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
@@ -133,7 +133,7 @@
         cursor: pointer;
         font-size: 1.1rem;
         line-height: 1;
-        color: #444;
+        color: var(--color-text);
         transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 
         &:hover:not(:disabled) {
@@ -267,7 +267,7 @@
     text-align: center;
     font-size: 1.45rem;
     margin: 0 0 0.6rem;
-    color: #222;
+    color: var(--color-text);
   }
 
   .measurements {
@@ -291,7 +291,7 @@
       .value {
         font-size: 1.05rem;
         font-weight: 700;
-        color: #333;
+        color: var(--color-text);
       }
     }
   }
@@ -343,7 +343,7 @@
         font-size: 0.85rem;
         font-weight: 700;
         text-align: right;
-        color: #333;
+        color: var(--color-text);
       }
 
       .stat-bar-bg {
@@ -368,7 +368,7 @@
     text-align: center;
     background: rgba(0,0,0,0.07);
     border-radius: 10px;
-    color: #333;
+    color: var(--color-text);
     text-decoration: none;
     font-weight: 600;
     font-size: 0.85rem;

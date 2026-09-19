@@ -1,3 +1,4 @@
+import { TranslationService } from '../../core/services/translation.service';
 import { Router } from '@angular/router';
 import { StatRowComponent } from '../stat-row/stat-row.component';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
@@ -12,7 +13,7 @@ import { PokemonDetailModel } from '../../models/pokemon.models';
   styleUrl: './quick-view.component.scss'
 })
 export class QuickViewComponent {
-  constructor(private router: Router) {}
+  constructor(public i18n: TranslationService, private router: Router) {}
 
   /**
    * Quando null, o painel exibe o estado vazio ("Selecione um Pokémon").

@@ -82,7 +82,7 @@
       flex: 1;
       min-width: 240px;
       max-width: 520px;
-      background: white;
+      background: var(--color-surface);
       border-radius: 50px;
       padding: 0.3rem 0.35rem 0.3rem 1.1rem;
       border: 1px solid rgba(0, 0, 0, 0.09);
@@ -111,7 +111,7 @@
         outline: none;
         background: transparent;
         font-size: 0.95rem;
-        color: #222;
+        color: var(--color-text);
         padding: 0.35rem 0.2rem;
 
         &::placeholder {
@@ -182,7 +182,7 @@
         position: relative;
         display: inline-flex;
         align-items: center;
-        background: white;
+        background: var(--color-surface);
         border-radius: 50px;
         padding: 0.28rem 0.4rem 0.28rem 0.9rem;
         border: 1px solid rgba(0, 0, 0, 0.09);
@@ -288,7 +288,7 @@
         display: inline-flex;
         align-items: center;
         gap: 0.45rem;
-        background: white;
+        background: var(--color-surface);
         border-radius: 50px;
         padding: 0.45rem 1rem;
         border: 1px solid rgba(0, 0, 0, 0.09);
@@ -339,7 +339,7 @@
           }
 
           .fav-count-pill {
-            background: white;
+            background: var(--color-surface);
             color: #e3350d;
           }
         }
@@ -619,7 +619,7 @@
   border-radius: 20px;
   padding: 1.5rem;
   margin-top: 50px;
-  background: white;
+  background: var(--color-surface);
   border: 1px solid rgba(0, 0, 0, 0.06);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
   display: flex;
@@ -690,7 +690,7 @@
   justify-content: center;
   padding: 4rem 2rem;
   text-align: center;
-  background: white;
+  background: var(--color-surface);
   border-radius: 24px;
   border: 1px solid rgba(0, 0, 0, 0.06);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
@@ -709,7 +709,7 @@
   h3 {
     font-size: 1.3rem;
     font-weight: 700;
-    color: #222;
+    color: var(--color-text);
     margin: 0;
   }
 
@@ -790,7 +790,7 @@
   max-height: calc(100vh - 2rem);
   display: flex;
   flex-direction: column;
-  background: rgba(255, 255, 255, 0.7);
+  background: var(--color-surface);
   backdrop-filter: blur(12px);
   border-radius: 24px;
   border: 1px solid rgba(255, 255, 255, 0.8);

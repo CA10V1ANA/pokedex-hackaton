@@ -26,7 +26,7 @@
           type="search"
           name="search"
           [(ngModel)]="searchQuery"
-          placeholder="Buscar por nome ou número (ex: Pikachu, 25)..."
+          placeholder="{{ i18n.t('SEARCH_PLACEHOLDER') }}"
           autocomplete="off"
         />
         @if (isSearchMode()) {

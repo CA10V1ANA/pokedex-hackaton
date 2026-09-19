@@ -107,6 +107,18 @@
       border: 1px solid rgba($color, 0.4);
       box-shadow: 0 8px 24px -4px rgba($color, 0.3);
 
+      :host-context(body.dark-theme) & {
+        background: linear-gradient(
+          140deg,
+          color.mix(#1a1a2e, $color, 75%) 0%,
+          color.mix(#1a1a2e, $color, 50%) 50%,
+          color.mix(#1a1a2e, $color, 25%) 100%
+        );
+        border-color: rgba($color, 0.2);
+        .pokemon-name { color: #f9fafb; }
+        .pokemon-id { color: rgba(255,255,255,0.6); }
+      }
+
       &:hover {
         border-color: rgba($color, 0.7);
         box-shadow: 0 16px 32px -4px rgba($color, 0.45);

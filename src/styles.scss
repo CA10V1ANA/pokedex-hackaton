@@ -38,13 +38,13 @@ html {
 
 body {
   font-family: var(--font-base);
-  background-color: #f4f7f6;
+  background-color: var(--color-bg); transition: background-color 0.3s;
   background-image: 
     radial-gradient(#cbd5e1 1.5px, transparent 1.5px),
     radial-gradient(#cbd5e1 1.5px, transparent 1.5px);
   background-size: 40px 40px;
   background-position: 0 0, 20px 20px;
-  color: var(--color-text);
+  color: var(--color-text); transition: color 0.3s;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 }
