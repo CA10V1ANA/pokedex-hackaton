@@ -30,13 +30,16 @@
     
       <!-- Dark Mode Toggle -->
       
-      <li class="lang-selector" style="display: flex; gap: 5px; align-items: center; padding: 0 1rem;">
-        <span style="font-size: 1.2rem;">🌐</span>
-        <select [ngModel]="i18n.currentLang()" (ngModelChange)="i18n.setLang($event)" style="background: transparent; border: 1px solid var(--color-border); color: var(--color-text); border-radius: 4px; padding: 2px;">
-          <option value="pt">PT</option>
-          <option value="en">EN</option>
-          <option value="es">ES</option>
-        </select>
+      
+    
+    </ul>
+    
+    <ul class="nav-links" style="margin-top: auto;">
+      <li class="lang-selector">
+        <a href="#" (click)="cycleLanguage(); $event.preventDefault()" [attr.title]="'Idioma: ' + (i18n.currentLang() | uppercase)">
+          <span class="nav-icon">🌐</span>
+          <span class="nav-label">{{ i18n.currentLang() | uppercase }}</span>
+        </a>
       </li>
       <li class="theme-toggle">
         <a href="#" (click)="toggleTheme(); $event.preventDefault()" [attr.aria-label]="isDarkMode() ? 'Ativar Modo Claro' : 'Ativar Modo Escuro'">

@@ -25,6 +25,13 @@ export class App implements OnInit {
     }
   }
 
+  cycleLanguage() {
+    const langs = ['pt', 'en', 'es'] as const;
+    const current = this.i18n.currentLang();
+    const nextIndex = (langs.indexOf(current) + 1) % langs.length;
+    this.i18n.setLang(langs[nextIndex]);
+  }
+
   toggleTheme() {
     this.isDarkMode.update(v => !v);
     if (this.isDarkMode()) {
