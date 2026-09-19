@@ -1,13 +1,12 @@
 import { StatRowComponent } from '../stat-row/stat-row.component';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { NgClass } from '@angular/common';
-import { RouterLink } from '@angular/router';
 import { PokemonDetailModel } from '../../models/pokemon.models';
 
 @Component({
   selector: 'app-quick-view',
   standalone: true,
-  imports: [StatRowComponent, NgClass, RouterLink],
+  imports: [StatRowComponent, NgClass],
   templateUrl: './quick-view.component.html',
   styleUrl: './quick-view.component.scss'
 })
