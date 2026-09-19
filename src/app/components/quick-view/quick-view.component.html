@@ -29,25 +29,23 @@
     </svg>
 
     <div class="header">
-      <div class="nav-controls">
+      <div class="nav-controls" style="display: flex; gap: 8px; font-weight: bold;">
         <button 
           type="button" 
           class="nav-btn prev-btn" 
           [disabled]="!hasPrev" 
           (click)="prev.emit()" 
-          title="Pokémon anterior"
-          aria-label="Pokémon anterior">
-          ‹
+          title="PokǸmon anterior">
+          ? Anterior
         </button>
-        <span class="pokemon-id">{{ pokemon.paddedId }}</span>
+        <span class="pokemon-id" style="margin: 0 10px;">{{ pokemon.paddedId }}</span>
         <button 
           type="button" 
           class="nav-btn next-btn" 
           [disabled]="!hasNext" 
           (click)="next.emit()" 
-          title="Próximo Pokémon"
-          aria-label="Próximo Pokémon">
-          ›
+          title="Prximo PokǸmon">
+          Prximo '
         </button>
       </div>
 
@@ -112,24 +110,17 @@
     <div class="stats">
       <h3>Stats Base</h3>
       @for (stat of pokemon.stats; track stat.name) {
-        <div class="stat-row">
-          <span class="stat-name">{{ stat.name }}</span>
-          <span class="stat-value">{{ stat.value }}</span>
-          <div class="stat-bar-bg">
-            <div 
-              class="stat-bar-fill" 
-              [style.width.%]="(stat.value / 255) * 100"
-              [style.background-color]="getStatColor(stat.value)"
-            ></div>
-          </div>
-        </div>
+        <app-stat-row 
+          [label]="formatStatName(stat.name)" 
+          [value]="stat.value">
+        </app-stat-row>
       }
     </div>
 
-    <!-- Link semântico para a página completa com deep link -->
-    <a [routerLink]="['/pokemon', pokemon.id]" class="full-detail-link">
-      Ver página completa →
-    </a>
+    <!-- Botão de Ação Primária -->
+    <button type="button" class="action-btn" (click)="sendToSimulator()" style="margin-top: 20px; width: 100%; background: #e3350d; color: white; padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px;">
+      ⚔️ Simular Batalha
+    </button>
 
   </div>
 }

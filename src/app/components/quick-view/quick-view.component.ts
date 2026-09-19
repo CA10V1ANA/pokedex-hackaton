@@ -1,3 +1,4 @@
+import { StatRowComponent } from '../stat-row/stat-row.component';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { NgClass } from '@angular/common';
 import { RouterLink } from '@angular/router';
@@ -6,7 +7,7 @@ import { PokemonDetailModel } from '../../models/pokemon.models';
 @Component({
   selector: 'app-quick-view',
   standalone: true,
-  imports: [NgClass, RouterLink],
+  imports: [StatRowComponent, NgClass, RouterLink],
   templateUrl: './quick-view.component.html',
   styleUrl: './quick-view.component.scss'
 })
@@ -25,13 +26,23 @@ export class QuickViewComponent {
   @Output() toggleFavorite = new EventEmitter<number>();
   @Output() close = new EventEmitter<void>();
 
-  /**
-   * Retorna uma cor semântica para a barra com base na força do atributo.
-   */
-  getStatColor(value: number): string {
-    if (value >= 100) return '#10b981'; // Excelente (Verde esmeralda)
-    if (value >= 75)  return '#3b82f6'; // Muito Bom (Azul)
-    if (value >= 50)  return '#f59e0b'; // Regular/Bom (Âmbar)
-    return '#f97316';                   // Inicial/Baixo (Coral)
+  
+
+  
+  sendToSimulator() {
+    alert('Simulador de Batalha em construção! PokǸmon ' + this.pokemon?.name + ' carregado na arena.');
+    // Aqui no futuro injetamos no serviço de batalha
+  }
+
+  formatStatName(name: string): string {
+    const statMap: Record<string, string> = {
+      'hp': 'HP',
+      'attack': 'ATK',
+      'defense': 'DEF',
+      'special-attack': 'SP. ATK',
+      'special-defense': 'SP. DEF',
+      'speed': 'SPD'
+    };
+    return statMap[name.toLowerCase()] || name.toUpperCase();
   }
 }
